@@ -1,6 +1,6 @@
 import dash
 import dash_core_components as dcc
-import dash_html_components as html
+from dash import html
 from dash.dependencies import Input, Output
 import plotly.graph_objs as go
 import pandas as pd
@@ -11,9 +11,9 @@ app = dash.Dash(__name__)
 app.title = "Simulation of variance-aware algorithms for Stochastic Bandit Problems"
 
 # Dateipfade der CSV-Dateien
-base_path = r"C:/Users/canis/OneDrive/Dokumente/uni/uni-surface/FSS 2024/BA/bachelorarbeit_vrlfg/BA/github/BA_code/2_algorithms_results"
+base_path = r"/Users/canis/Library/CloudStorage/OneDrive-Persönlich/Dokumente/programme/coding/github/bandit_playground/2_algorithms_results"
 # Layout-Pfade für die vorab berechneten Value-at-Risk-Daten
-var_base_path = r"C:/Users/canis/OneDrive/Dokumente/uni/uni-surface/FSS 2024/BA/bachelorarbeit_vrlfg/BA/github/BA_code/2_algorithms_results/Value_at_Risk"
+var_base_path = r"/Users/canis/Library/CloudStorage/OneDrive-Persönlich/Dokumente/programme/coding/github/bandit_playground/2_algorithms_results/Value_at_Risk"
 
 algorithm_data = [
     "1_ETC", "2_Greedy", "3_UCB", "4_UCB-Normal", "5_UCB-Tuned", "6_UCB-V", "7_PAC-UCB", "8_UCB-Improved", "9_EUCBV",
