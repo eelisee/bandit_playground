@@ -1,0 +1,6 @@
+Timestep,Average Total Reward,Average Suboptimal Arms,Average Regret,Average Zeros Count,Average Ones Count,Pulls complete
+2,1.81,0.0,0.0,0.19,1.81
+3,2.71,0.0,0.0,0.29,2.71
+100,85.63,46.61,4.6610000000000005,14.37,85.63
+200,172.59,72.4,7.240000000000004,27.41,172.59
+2000,1721.5,780.55,78.055,278.5,1721.5
