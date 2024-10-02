@@ -1,9 +1,4 @@
-setup_instructions.md – Ausführliche Setup-Anleitung
-Für die ausführliche Anleitung, wie die Studierenden das Dashboard bei sich aufsetzen, solltest du eine separate Datei erstellen (setup_instructions.md). Diese sollte folgende Informationen enthalten:
 
-Schritt-für-Schritt-Anleitung zur Installation: Erkläre hier auch Details, z.B. wie sie ein virtuelles Python-Umfeld aufsetzen können (falls das empfohlen wird), wie sie sicherstellen, dass alle Abhängigkeiten installiert sind und wie sie das Dashboard lokal starten können.
-Fehlerbehebung: Füge eine Sektion zur Fehlerbehebung ein, die häufige Probleme bei der Installation oder beim Starten des Dashboards beschreibt (z.B. "Port already in use" oder "Missing package").
-Dashboard starten: Gib klare Anweisungen, wie das Dashboard über den Browser unter localhost:127... gestartet wird, damit sie es leicht öffnen und verwenden können.
 4. Klassifizierung der Algorithmen
 Da du den Fokus von „Variance-aware“ Bandit-Algorithmen auf eine allgemeinere Darstellung erweitern möchtest, solltest du eine klare Klassifizierung der Algorithmen in deinem Dashboard vornehmen. Die Studierenden sollten sofort erkennen, welche Art von Bandit-Algorithmus sie gerade betrachten:
 
@@ -12,9 +7,11 @@ Epsilon-Greedy: Einfacher Ansatz zur Steuerung des Tradeoffs.
 UCB (Upper Confidence Bound): Algorithmen, die versuchen, die Unsicherheit über die Schätzwerte zu minimieren.
 Thompson Sampling: Probabilistischer Ansatz zur Balance zwischen Exploration und Exploitation.
 Optional: Füge eine interaktive Komponente ein, die den Studierenden erlaubt, zwischen den verschiedenen Algorithmen zu wechseln und die Ergebnisse direkt zu vergleichen. Diese sollten in deinem Dashboard klar als separate Auswahlmöglichkeiten dargestellt werden.
+
 5. Anpassung an die Benutzererfahrung
 Kommentierung und Dokumentation: Da die Studierenden noch am Anfang ihres Masterstudiums stehen, ist es wichtig, den Code ausreichend zu kommentieren. Füge Erklärungen zu den einzelnen Abschnitten hinzu, insbesondere in den Algorithmen, damit die Studierenden nachvollziehen können, was in jeder Zeile passiert.
 Beispiele für Parameterveränderungen: Erstelle ein paar vorgefertigte Beispiele, die verschiedene Parameteränderungen zeigen und welche Effekte dies auf die Ergebnisse hat. Die Studierenden sollten in der Lage sein, diese Parameter einfach zu modifizieren, um das Verhalten der Algorithmen zu beobachten.
+
 6. Codevereinfachung
 Wenn dein Dashboard sehr komplexe oder spezifische Funktionen beinhaltet (wie z.B. Variance-aware Bandit Algorithmen), die für das aktuelle Niveau der Studierenden nicht unbedingt notwendig sind, solltest du diese ggf. entweder auskommentieren oder in fortgeschrittene Sektionen des Codes verschieben. Erkläre auch, dass sie diese fortgeschrittenen Themen später betrachten können, wenn sie mehr Erfahrung gesammelt haben.
 
@@ -23,3 +20,6 @@ Da Python-Fehler oder Abhängigkeitsprobleme oft ein Hindernis sein können, sol
 
 Unittest für jeden Algorithmus: Z.B. ob Epsilon-Greedy korrekt die Belohnungen maximiert.
 Dashboard-Funktionalität testen: Ein einfacher Test, ob das Dashboard korrekt aufgesetzt und gestartet werden kann.
+
+todo:
+add all file names into plot-visualization-test.py
