@@ -20,14 +20,14 @@ cd bandit_playground
 
 It is strongly recommended to use a virtual environment to manage the project's dependencies. You can create and activate a virtual environment by running the following commands:
 
-For macOS/Linux:
+__For macOS/Linux:__
 
 ```bash
 python3 -m venv venv
 source venv/bin/activate
 ```
 
-For Windows:
+__For Windows:__
 ```bash
 python -m venv venv
 venv\Scripts\activate
@@ -102,13 +102,13 @@ If the error persists, check if you are using the correct Python version (3.9 or
 ### 8.3 Virtual Environment Not Activated
 If running python src/dashboard.py opens a different Python version or doesn’t work as expected, it might mean the virtual environment is not activated. Make sure to activate it:
 
-For macOS/Linux: 
+__For macOS/Linux:__
 
 ```bash
 source venv/bin/activate
 ```
 
-For Windows: 
+__For Windows:__
 ```bash
 venv\Scripts\activate
 ```
