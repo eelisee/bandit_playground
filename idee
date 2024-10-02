@@ -1,46 +1,4 @@
-1. Strukturierung des Repos
-Die Struktur deines Repos sollte klar und verständlich sein, damit die Studierenden den Zweck jedes Ordners und jeder Datei schnell erfassen können. Ein Beispiel für eine übersichtliche Struktur wäre:
-
-css
-Code kopieren
-/ Stochastic-Bandits-Dashboard/
-    ├── README.md
-    ├── setup_instructions.md
-    ├── requirements.txt
-    ├── src/
-    │   ├── dashboard.py
-    │   ├── algorithms/
-    │   │   ├── epsilon_greedy.py
-    │   │   ├── ucb.py
-    │   │   └── thompson_sampling.py
-    ├── data/
-    │   └── sample_data.csv
-    ├── tests/
-    │   ├── test_epsilon_greedy.py
-    │   ├── test_ucb.py
-    └── docs/
-        └── bandit_theory.pdf
-Änderungen:
-
-Ordnerstruktur klären: Der Code sollte in einem src-Verzeichnis organisiert sein. Die Algorithmen sollten klar nach ihrer Art sortiert in Unterordnern liegen (algorithms).
-Datenablage: Ein Ordner für Beispiel- oder Trainingsdaten (data) sollte vorhanden sein, damit die Studierenden sofort mit vorbereiteten Daten experimentieren können.
-Tests: Implementiere einfache Tests, um zu zeigen, dass das Dashboard und die Algorithmen funktionieren (tests). Diese können auch helfen, den Studierenden zu zeigen, wie sie die Funktionsweise der Algorithmen testen können.
-Dokumentation: Ein docs-Ordner mit einer grundlegenden theoretischen Einführung (z.B. als PDF oder Markdown) zu den Bandit-Algorithmen, die in deinem Dashboard behandelt werden. Das gibt den Studierenden eine klare Verbindung zwischen Theorie und Praxis.
-2. README.md – Erste Anlaufstelle
-Das README.md sollte eine klare Anleitung geben, wie die Studierenden dein Dashboard aufsetzen können. Es sollte folgende Punkte enthalten:
-
-Projektbeschreibung: Eine kurze Erklärung, was das Dashboard ist und was die Studierenden damit machen sollen (z.B. Simulationen und Parameterstudien für verschiedene Bandit-Algorithmen).
-Anleitung zur Installation: Da die Studierenden nur grundlegende Python-Kenntnisse haben, sollte dieser Abschnitt ausführlich sein. Sie sollten wissen, welche Versionen von Python sie benötigen, welche Bibliotheken installiert werden müssen und wie sie das Dashboard starten können.
-Beispiel:
-bash
-Code kopieren
-git clone https://github.com/dein-repo/stochastic-bandits-dashboard.git
-cd stochastic-bandits-dashboard
-pip install -r requirements.txt
-python src/dashboard.py
-Kurze Einführung in die Algorithmen: Gib eine kurze, verständliche Erklärung zu jedem implementierten Algorithmus (z.B. Epsilon-Greedy, UCB, Thompson Sampling). Dies hilft den Studierenden, eine Verbindung zwischen Theorie und der Implementierung herzustellen.
-Parameteränderungen: Erkläre, wie sie verschiedene Parameter in deinem Dashboard ändern können und welche Auswirkungen dies auf die Algorithmen hat. Du kannst hier z.B. Beispielwerte oder Anwendungsfälle für die Parameter angeben.
-3. setup_instructions.md – Ausführliche Setup-Anleitung
+setup_instructions.md – Ausführliche Setup-Anleitung
 Für die ausführliche Anleitung, wie die Studierenden das Dashboard bei sich aufsetzen, solltest du eine separate Datei erstellen (setup_instructions.md). Diese sollte folgende Informationen enthalten:
 
 Schritt-für-Schritt-Anleitung zur Installation: Erkläre hier auch Details, z.B. wie sie ein virtuelles Python-Umfeld aufsetzen können (falls das empfohlen wird), wie sie sicherstellen, dass alle Abhängigkeiten installiert sind und wie sie das Dashboard lokal starten können.
