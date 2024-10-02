@@ -129,3 +129,7 @@ If you encounter an issue not covered here, try the following steps:
 **Google the error message:** Many installation issues have been encountered and solved by others.
 
 **Check Python and package versions:** Ensure you are using compatible versions of Python and the packages listed in ```requirements.txt```.
+
+## 10. Contact and Support
+
+If you encounter any issues that you cannot resolve, feel free to reach out or post your issue in the relevant GitHub repository issue tracker. Please provide details about your system, the error message, and the steps that led to the issue.
