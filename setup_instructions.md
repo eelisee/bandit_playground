@@ -1,6 +1,6 @@
 # Setup Instructions
 
-Welcome to the Stochastic Bandits Dashboard project! Follow these instructions to set up the project locally on your machine. This guide assumes you have basic Python experience. If any issues arise, refer to the **Troubleshooting** section at the end.
+Welcome to the Bandit Playground project! Follow these instructions to set up the project locally on your machine. This guide assumes you have basic Python experience. If any issues arise, refer to the **Troubleshooting** section at the end.
 
 ## 1. System Requirements
 
@@ -12,8 +12,8 @@ Welcome to the Stochastic Bandits Dashboard project! Follow these instructions t
 First, you need to clone the repository from GitHub to your local machine. Open your terminal (or command prompt) and run the following command:
 
 ```bash
-git clone https://github.com/your-username/stochastic-bandits-dashboard.git
-cd stochastic-bandits-dashboard
+git clone https://github.com/eelisee/bandit_playground.git
+cd bandit_playground
 ```
 
 ## 3. Set Up a Virtual Environment
@@ -54,7 +54,7 @@ Install them by running the following command:
 pip install -r requirements.txt
 ```
 
-This command will install all the dependencies listed in the requirements.txt file. Ensure that all packages install without errors.
+This command will install all the dependencies listed in the ```requirements.txt``` file. Ensure that all packages install without errors.
 
 ## 5. Running the Dashboard
 
@@ -98,12 +98,33 @@ If you encounter errors about missing dependencies, ensure that you have install
 
 Run ```pip install -r requirements.txt``` again to ensure all dependencies are installed.
 If the error persists, check if you are using the correct Python version (3.9 or 3.11.5).
-8.3 Virtual Environment Not Activated
+
+### 8.3 Virtual Environment Not Activated
 If running python src/dashboard.py opens a different Python version or doesn’t work as expected, it might mean the virtual environment is not activated. Make sure to activate it:
 
-For macOS/Linux: source venv/bin/activate
-For Windows: venv\Scripts\activate
-8.4 Issues Installing Packages
+For macOS/Linux: 
+
+```bash
+source venv/bin/activate
+```
+
+For Windows: 
+```bash
+venv\Scripts\activate
+```
+### 8.4 Issues Installing Packages
 Some packages may fail to install due to system-specific issues (e.g., conflicting versions or missing system libraries). Here are some general tips:
 
-Upgrade pip: Make sure you have the latest version of pip by running:
+**Upgrade pip:** Make sure you have the latest version of ```pip``` by running:
+
+```bash
+pip install --upgrade pip
+```
+
+**Check the error log:** The error message during installation usually gives clues about missing dependencies or incompatible versions.
+
+### 8.5 Other Issues
+If you encounter an issue not covered here, try the following steps:
+
+**Google the error message:** Many installation issues have been encountered and solved by others.
+**Check Python and package versions:** Ensure you are using compatible versions of Python and the packages listed in ```requirements.txt```.
