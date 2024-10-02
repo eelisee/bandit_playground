@@ -1,4 +1,16 @@
 # Variance-aware Algorithms for Stochastic Bandit Problems
+
+
+einfügen: Projektbeschreibung, anleitung zur Installation, bspw:
+
+git clone https://github.com/dein-repo/stochastic-bandits-dashboard.git
+cd stochastic-bandits-dashboard
+pip install -r requirements.txt
+python src/dashboard.py
+
+kurze einführung in Algorithmen, parameteränderung
+
+
 Exploration-Exploitation Trade-Off of Bandit Algorithms in Comparison
 
 This repository contains the implementation of various multi-armed bandit algorithms and a dashboard for visualizing their performance. The goal is to compare the effectiveness of different algorithms in maximizing rewards and minimizing regret over time. Below is a brief overview of each algorithm's functionality:

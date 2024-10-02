@@ -1,0 +1,5 @@
+Für die ausführliche Anleitung, wie die Studierenden das Dashboard bei sich aufsetzen, solltest du eine separate Datei erstellen (setup_instructions.md). Diese sollte folgende Informationen enthalten:
+
+Schritt-für-Schritt-Anleitung zur Installation: Erkläre hier auch Details, z.B. wie sie ein virtuelles Python-Umfeld aufsetzen können (falls das empfohlen wird), wie sie sicherstellen, dass alle Abhängigkeiten installiert sind und wie sie das Dashboard lokal starten können.
+Fehlerbehebung: Füge eine Sektion zur Fehlerbehebung ein, die häufige Probleme bei der Installation oder beim Starten des Dashboards beschreibt (z.B. "Port already in use" oder "Missing package").
+Dashboard starten: Gib klare Anweisungen, wie das Dashboard über den Browser unter localhost:127... gestartet wird, damit sie es leicht öffnen und verwenden können.
