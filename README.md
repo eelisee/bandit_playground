@@ -15,11 +15,6 @@ This repository contains the implementation of various multi-armed bandit algori
 - **Not Variance Aware**: A combined result of algorithms that do not consider variance.
 - **Variance Aware**: A combined result of algorithms that consider variance.
 
-# Table of Contents
-* [Bandit Model] (#Bandit-Model)
-* [Plots in the Dashboard] (#Plots-in-the-Dashboard)
-* [Setup Instructions] (#Setup-Instructions)
-
 
 ## Bandit Model
 
