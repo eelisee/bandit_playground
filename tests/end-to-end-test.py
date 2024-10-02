@@ -15,7 +15,7 @@ def test_dashboard_loading(dash_duo, dash_app):
     dash_duo.wait_for_page(dash_duo.server_url, timeout=10)
     
     # Überprüft, ob der Titel der Seite korrekt angezeigt wird
-    assert dash_duo.driver.title == "Simulation of variance-aware Algorithms for Stochastic Bandit Problems"
+    assert dash_duo.driver.title == "Simulation of Variance-aware Algorithms for Stochastic Bandit Problems"
     
     # Optional: Überprüft, ob das Layout (bestimmte Elemente) vorhanden ist
     assert dash_duo.find_element("body") is not None

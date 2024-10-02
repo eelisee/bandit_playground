@@ -12,7 +12,7 @@ app.title = "Simulation of variance-aware algorithms for Stochastic Bandit Probl
 
 # Basis path
 base_path = os.path.join(os.getcwd(), "data", "algorithms_results")
-var_base_path = os.path.join(os.getcwd(), "data", "algorithms_results")
+var_base_path = os.path.join(os.getcwd(), "data", "algorithms_results", "Value_at_Risk")
 
 algorithm_data = [
     "1_ETC", "2_Greedy", "3_UCB", "4_UCB-Normal", "5_UCB-Tuned", "6_UCB-V", "7_PAC-UCB", "8_UCB-Improved", "9_EUCBV",
