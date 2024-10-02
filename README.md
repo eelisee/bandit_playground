@@ -15,6 +15,12 @@ This repository contains the implementation of various multi-armed bandit algori
 - **Not Variance Aware**: A combined result of algorithms that do not consider variance.
 - **Variance Aware**: A combined result of algorithms that consider variance.
 
+# Table of Contents
+* [Bandit Model] (#Bandit-Model)
+* [Plots in the Dashboard] (#Plots-in-the-Dashboard)
+* [Setup Instructions] (#Setup-Instructions)
+
+
 ## Bandit Model
 
 The bandit model used in this repository focuses on a 2-armed bandit problem with Bernoulli-distributed arms for most algorithms and Gaussian-distributed arms for the UCB-Normal algorithm. The arms are set with three different reward scenarios:
