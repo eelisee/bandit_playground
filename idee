@@ -15,11 +15,7 @@ Beispiele für Parameterveränderungen: Erstelle ein paar vorgefertigte Beispiel
 6. Codevereinfachung
 Wenn dein Dashboard sehr komplexe oder spezifische Funktionen beinhaltet (wie z.B. Variance-aware Bandit Algorithmen), die für das aktuelle Niveau der Studierenden nicht unbedingt notwendig sind, solltest du diese ggf. entweder auskommentieren oder in fortgeschrittene Sektionen des Codes verschieben. Erkläre auch, dass sie diese fortgeschrittenen Themen später betrachten können, wenn sie mehr Erfahrung gesammelt haben.
 
-7. Testing und Debugging
-Da Python-Fehler oder Abhängigkeitsprobleme oft ein Hindernis sein können, sollten einfache Testfunktionen in den tests-Ordner integriert werden, damit die Studierenden überprüfen können, ob alles korrekt läuft. Zum Beispiel:
 
-Unittest für jeden Algorithmus: Z.B. ob Epsilon-Greedy korrekt die Belohnungen maximiert.
-Dashboard-Funktionalität testen: Ein einfacher Test, ob das Dashboard korrekt aufgesetzt und gestartet werden kann.
 
 todo:
 add all file names into plot-visualization-test.py

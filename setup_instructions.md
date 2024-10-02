@@ -42,10 +42,12 @@ dash==2.10.0
 dash-core-components==2.0.0
 dash-html-components==2.0.0
 dash-bootstrap-components==1.0.3
-dash-dependencies==0.1.0
 plotly==5.11.0
 pandas==1.3.5
 numpy==1.21.4
+psutil==5.9.1
+multiprocess==0.70.12.2
+selenium==4.5.0
 ```
 
 Install them by running the following command:
