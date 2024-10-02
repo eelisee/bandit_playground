@@ -127,4 +127,5 @@ pip install --upgrade pip
 If you encounter an issue not covered here, try the following steps:
 
 **Google the error message:** Many installation issues have been encountered and solved by others.
+
 **Check Python and package versions:** Ensure you are using compatible versions of Python and the packages listed in ```requirements.txt```.
