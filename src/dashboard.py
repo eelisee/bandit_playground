@@ -15,71 +15,22 @@ app.title = "Simulation of Variance-aware Algorithms for Stochastic Bandit Probl
 base_path = os.path.join(os.getcwd(), "data", "algorithms_results")
 var_base_path = os.path.join(os.getcwd(), "data", "algorithms_results", "Value_at_Risk")
 
-#  Liste der Algorithmen
+#  joined list of all algorithms
 all_algorithms = [
     "1_ETC", "2_Greedy", "3_UCB", "4_UCB-Normal",
     "7_PAC-UCB", "8_UCB-Improved", "5_UCB-Tuned",
-    "6_UCB-V", "9_EUCBV"
+    "6_UCB-V", "9_EUCBV", "Standard Algorithms", "Not-variance-aware UCB Variations", "Variance-aware UCB Variations"
 ]
 
+# algorithms in structured list
 algorithms = {
     "Standard Algorithms": ["1_ETC", "2_Greedy", "3_UCB", "4_UCB-Normal"],
     "Not-variance-aware UCB Variations": ["7_PAC-UCB", "8_UCB-Improved"],
     "Variance-aware UCB Variations": ["5_UCB-Tuned", "6_UCB-V", "9_EUCBV"]
 }
 
-
-# Funktion zum Generieren der benutzerdefinierten Checkliste
-def generate_custom_checklist():
-    checklist_items = []
-    algorithm_groups = {
-        "Standard Algorithms": ["1_ETC", "2_Greedy", "3_UCB", "4_UCB-Normal"],
-        "Not-variance-aware UCB Variations": ["7_PAC-UCB", "8_UCB-Improved"],
-        "Variance-aware UCB Variations": ["5_UCB-Tuned", "6_UCB-V", "9_EUCBV"]
-    }
-
-    for group_name, algorithms in algorithm_groups.items():
-        # Gruppennamen hinzufügen
-        checklist_items.append(
-            html.Div(
-                group_name, style={"fontWeight": "bold", "marginTop": "10px"}
-            )
-        )
-        # Algorithmen in die Gruppe einfügen
-        for algo in algorithms:
-            checklist_items.append(
-                dcc.Checklist(
-                    options=[
-                        {
-                            "label": algo,
-                            "value": algo,
-                        }
-                    ],
-                    value=[],  # Standardmäßig nicht ausgewählt
-                    id={"type": "algorithm-checkbox", "index": algo},
-                    style={"marginLeft": "20px"}
-                )
-            )
-
-    return html.Div(checklist_items)
-
-
-# Flattened algorithm list for dropdown options
-all_algorithms = sum(algorithms.values(), [])
-
-colors = [
-    'blue', 'green', '#DF3A01', '#58D3F7', '#FE2E9A', '#D7DF01', 'black', 'orange', 'purple', 
-    'brown', '#DA75CC', '#7A7A7A'
-]
-
-line_styles = [
-    'solid', 'solid', 'solid', 'solid', 'dash', 'dash', 'dot', 'dot', 'dash', 'solid', 'dot', 'dash', 
-]
-
-
-
-# Define the data for groups and algorithms
-algorithm_groups = {
+# Define the design (color and line style) for groups and algorithms
+algorithm_design = {
     "Standard Algorithms": [
         {"label": "1_ETC", "color": "#58D3F7", "line_style": "solid"},
         {"label": "2_Greedy", "color": "#58D3F7", "line_style": "solid"},
@@ -96,6 +47,40 @@ algorithm_groups = {
         {"label": "9_EUCBV", "color": "#D7DF01", "line_style": "dash"},
     ],
 }
+
+# # Funktion zum Generieren der benutzerdefinierten Checkliste
+# def generate_custom_checklist():
+#     checklist_items = []
+#     algorithm_groups = {
+#         "Standard Algorithms": ["1_ETC", "2_Greedy", "3_UCB", "4_UCB-Normal"],
+#         "Not-variance-aware UCB Variations": ["7_PAC-UCB", "8_UCB-Improved"],
+#         "Variance-aware UCB Variations": ["5_UCB-Tuned", "6_UCB-V", "9_EUCBV"]
+#     }
+
+#     for group_name, algorithms in algorithm_groups.items():
+#         # Gruppennamen hinzufügen
+#         checklist_items.append(
+#             html.Div(
+#                 group_name, style={"fontWeight": "bold", "marginTop": "10px"}
+#             )
+#         )
+#         # Algorithmen in die Gruppe einfügen
+#         for algo in algorithms:
+#             checklist_items.append(
+#                 dcc.Checklist(
+#                     options=[
+#                         {
+#                             "label": algo,
+#                             "value": algo,
+#                         }
+#                     ],
+#                     value=[],  # Standardmäßig nicht ausgewählt
+#                     id={"type": "algorithm-checkbox", "index": algo},
+#                     style={"marginLeft": "20px"}
+#                 )
+#             )
+
+#     return html.Div(checklist_items)
 
 # Dummy-Plot Funktion
 def create_dummy_plot(title):
