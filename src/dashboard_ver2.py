@@ -1,25 +1,22 @@
 import dash
 import dash_core_components as dcc
 from dash import html
-import dash_html_components as html
-from dash.dependencies import Input, Output, ALL
+from dash.dependencies import Input, Output
 import plotly.graph_objs as go
 import pandas as pd
 import os
 
 # Initialisiere die Dash App
 app = dash.Dash(__name__)
-app.title = "Simulation of Variance-aware Algorithms for Stochastic Bandit Problems"
+app.title = "Simulation of variance-aware algorithms for Stochastic Bandit Problems"
 
 # Basis path
 base_path = os.path.join(os.getcwd(), "data", "algorithms_results")
 var_base_path = os.path.join(os.getcwd(), "data", "algorithms_results", "Value_at_Risk")
 
-#  Liste der Algorithmen
-all_algorithms = [
-    "1_ETC", "2_Greedy", "3_UCB", "4_UCB-Normal",
-    "7_PAC-UCB", "8_UCB-Improved", "5_UCB-Tuned",
-    "6_UCB-V", "9_EUCBV"
+algorithm_data = [
+    "1_ETC", "2_Greedy", "3_UCB", "4_UCB-Normal", "5_UCB-Tuned", "6_UCB-V", "7_PAC-UCB", "8_UCB-Improved", "9_EUCBV",
+    "Standard Algorithms", "Not-variance-aware UCB Variations", "Variance-aware UCB Variations"
 ]
 
 algorithms = {
@@ -27,42 +24,6 @@ algorithms = {
     "Not-variance-aware UCB Variations": ["7_PAC-UCB", "8_UCB-Improved"],
     "Variance-aware UCB Variations": ["5_UCB-Tuned", "6_UCB-V", "9_EUCBV"]
 }
-
-
-# Funktion zum Generieren der benutzerdefinierten Checkliste
-def generate_custom_checklist():
-    checklist_items = []
-    algorithm_groups = {
-        "Standard Algorithms": ["1_ETC", "2_Greedy", "3_UCB", "4_UCB-Normal"],
-        "Not-variance-aware UCB Variations": ["7_PAC-UCB", "8_UCB-Improved"],
-        "Variance-aware UCB Variations": ["5_UCB-Tuned", "6_UCB-V", "9_EUCBV"]
-    }
-
-    for group_name, algorithms in algorithm_groups.items():
-        # Gruppennamen hinzufügen
-        checklist_items.append(
-            html.Div(
-                group_name, style={"fontWeight": "bold", "marginTop": "10px"}
-            )
-        )
-        # Algorithmen in die Gruppe einfügen
-        for algo in algorithms:
-            checklist_items.append(
-                dcc.Checklist(
-                    options=[
-                        {
-                            "label": algo,
-                            "value": algo,
-                        }
-                    ],
-                    value=[],  # Standardmäßig nicht ausgewählt
-                    id={"type": "algorithm-checkbox", "index": algo},
-                    style={"marginLeft": "20px"}
-                )
-            )
-
-    return html.Div(checklist_items)
-
 
 # Flattened algorithm list for dropdown options
 all_algorithms = sum(algorithms.values(), [])
@@ -75,27 +36,6 @@ colors = [
 line_styles = [
     'solid', 'solid', 'solid', 'solid', 'dash', 'dash', 'dot', 'dot', 'dash', 'solid', 'dot', 'dash', 
 ]
-
-
-
-# Define the data for groups and algorithms
-algorithm_groups = {
-    "Standard Algorithms": [
-        {"label": "1_ETC", "color": "#58D3F7", "line_style": "solid"},
-        {"label": "2_Greedy", "color": "#58D3F7", "line_style": "solid"},
-        {"label": "3_UCB", "color": "#58D3F7", "line_style": "solid"},
-        {"label": "4_UCB-Normal", "color": "#58D3F7", "line_style": "solid"},
-    ],
-    "Not-variance-aware UCB Variations": [
-        {"label": "7_PAC-UCB", "color": "#FE2E9A", "line_style": "dot"},
-        {"label": "8_UCB-Improved", "color": "#FE2E9A", "line_style": "dot"},
-    ],
-    "Variance-aware UCB Variations": [
-        {"label": "5_UCB-Tuned", "color": "#D7DF01", "line_style": "dash"},
-        {"label": "6_UCB-V", "color": "#D7DF01", "line_style": "dash"},
-        {"label": "9_EUCBV", "color": "#D7DF01", "line_style": "dash"},
-    ],
-}
 
 # Dummy-Plot Funktion
 def create_dummy_plot(title):
@@ -194,54 +134,39 @@ app.layout = html.Div(
                                     placeholder='Select...',
                                     clearable=False,
                                     value=None  # Initial kein Wert ausgewählt
-                                 ),
-                        
-                        #         html.Label('Algorithm Selection'),
-                        #         dcc.Checklist(
-                        #             id='algorithm-selection',
-                        #             options=[
-                        #                 # Group options with color and line style information
-                        #                 {'label': f"{group} [{colors[idx]}, {line_styles[idx]}]", 'value': group, 
-                        #                 'style': {'color': colors[idx], 'fontWeight': 'bold'}}
-                        #                 for idx, group in enumerate(algorithms.keys())
-                        #             ] + [
-                        #                 # Algorithm options with indentation, color, and line style
-                        #                 {'label': f"    {algo} [{colors[idx + len(algorithms.keys())]}, {line_styles[idx + len(algorithms.keys())]}]", 
-                        #                 'value': algo, 
-                        #                 'style': {'color': colors[idx + len(algorithms.keys())]}}
-                        #                 for idx, (group, algos) in enumerate(algorithms.items())
-                        #                 for algo in algos
-                        #             ],
-                        #             value=all_algorithms,  # Initially, all algorithms are selected
-                        #             labelStyle={'display': 'block', 'marginLeft': '20px'}  # Add indentation for better visual separation
-                        #         ),
-                        #     ]
-                        # ),
-                        # html.H2("Legend"),
-                        # html.Ul(
-                        #     # Create legend entries for each group and algorithm
-                        #     children=[
-                        #         html.Li(
-                        #             group,
-                        #             style={'color': colors[idx], 'fontWeight': 'bold'}
-                        #         )
-                        #         for idx, group in enumerate(algorithms.keys())
-                        #     ] + [
-                        #         html.Li(
-                        #             f'    {algo}',
-                        #             style={'color': colors[idx + len(algorithms.keys())]}
-                        #         )
-                        #         for idx, (group, algos) in enumerate(algorithms.items())
-                        #         for algo in algos
-                            ],
+                                ),
+                                html.Label('Algorithm Selection'),
+                                # dcc.Checklist(
+                                #     id='group-selection',
+                                #     options=[{'label': k, 'value': k} for k in algorithms.keys()],
+                                #     value=[],  # Initially no group selected
+                                #     labelStyle={'display': 'block'}
+                                # ),
+                                # dcc.Checklist(
+                                #     id='algorithm-selection',
+                                #     options=[{'label': algo, 'value': algo} for algo in all_algorithms],
+                                #     value=all_algorithms,  # Initially all algorithms are selected
+                                #     labelStyle={'display': 'block'}
+                                # ),
+                                dcc.Checklist(
+                                    id='algorithm-selection',
+                                    options=[
+                                        # Zuerst die Gruppen
+                                        {'label': group, 'value': group} for group in algorithms.keys()
+                                    ] + [
+                                        # Dann die Algorithmen, mit visueller Einrückung
+                                        {'label': f'    {algo}', 'value': algo} for group, algos in algorithms.items() for algo in algos
+                                    ],
+                                    value=all_algorithms,  # Alle Algorithmen initial ausgewählt
+                                    labelStyle={'display': 'block'}
+                                ),
+                                html.Div(id='output')
+                            ]
                         ),
-
-                    ]
-                ),
-                html.Div(
-                    [
-                        html.H4("Algorithm Selection"),
-                        generate_custom_checklist(),
+                        html.H2("Legend"),
+                        html.Ul(
+                            children=[html.Li(algo, style={'color': color}) for algo, color in zip(algorithms, colors)]
+                        )
                     ]
                 ),
                 # Rechte Seite mit Plots
@@ -265,19 +190,11 @@ app.layout = html.Div(
         )
     ]
 )
-
-
-# Callback zum Aktualisieren der Ausgabe basierend auf den ausgewählten Algorithmen
+# Callback, um die Auswahl der Algorithmen und Gruppen zu synchronisieren
 @app.callback(
-    Output('output-container', 'children'),
-    [Input({"type": "algorithm-checkbox", "index": ALL}, "value")]
+    Output('output', 'children'),
+    Input('algorithm-selection', 'value')
 )
-def update_output(selected_values):
-    # Ermitteln, welche Algorithmen ausgewählt wurden
-    selected_algorithms = [
-        algorithm for algorithm, selected in zip(all_algorithms, selected_values) if selected
-    ]
-    return f"Selected algorithms: {', '.join(selected_algorithms)}"
 
 def update_dropdown(selected_algorithms):
     # Dropdown-Optionen auf die ausgewählten Algorithmen aus der Checkliste beschränken
@@ -316,7 +233,7 @@ def update_selection(selected_values):
      Output('plot4', 'figure'),
      Output('plot5', 'figure'),
      Output('plot6', 'figure')],
-    [Input({"type": "algorithm-checkbox", "index": ALL}, "value"),
+    [Input('algorithm-selection', 'value'),
      Input('selected_algorithm', 'value'),
      Input('arm_distribution', 'value'),
      Input('first_move', 'value'),
@@ -331,16 +248,6 @@ def update_plots(selected_algorithms, selected_algorithm, arm_distribution, firs
     data = {}
     for algo in selected_algorithms:
         data[algo] = load_data(algo, arm_distribution, first_move)
-         # Determine the color and line style
-        if algo in algorithms:
-            # Use the group color and line style
-            color = colors[list(algorithms.keys()).index(algo)]
-            line_style = line_styles[list(algorithms.keys()).index(algo)]
-        else:
-            # Use the algorithm color and line style
-            color_idx = all_algorithms.index(algo)
-            color = colors[color_idx]
-            line_style = line_styles[color_idx]
 
     # Plot 1: Average Total Reward
     fig1 = go.Figure()
@@ -440,35 +347,35 @@ def update_plots(selected_algorithms, selected_algorithm, arm_distribution, firs
     )
 
     # Plot 4: Distribution of Total Regret at Timestep 100000
-    selected_data = data[selected_algorithm][0]
-    df_100k = selected_data[selected_data['Timestep'] == 100000]
-    fig4 = go.Figure(go.Histogram(x=df_100k['Total Regret'], marker_color=colors[algorithm_data.index(selected_algorithm)]))
-    fig4.update_layout(
-        title=f'Fig. 4: Distribution of Total Regret at Time 100 000 for {selected_algorithms}',
-        xaxis_title="Total Regret",
-        yaxis_title="Count",
-        paper_bgcolor='white',
-        plot_bgcolor='white',
-        font={'color': 'black'},
-        showlegend=False
-    )
+    # selected_data = data[selected_algorithm][0]
+    # df_100k = selected_data[selected_data['Timestep'] == 100000]
+    # fig4 = go.Figure(go.Histogram(x=df_100k['Total Regret'], marker_color=colors[algorithm_data.index(selected_algorithm)]))
+    # fig4.update_layout(
+    #     title=f'Fig. 4: Distribution of Total Regret at Time 100 000 for {selected_algorithms}',
+    #     xaxis_title="Total Regret",
+    #     yaxis_title="Count",
+    #     paper_bgcolor='white',
+    #     plot_bgcolor='white',
+    #     font={'color': 'black'},
+    #     showlegend=False
+    # )
 
-    if selected_algorithm:
-        selected_data = data[selected_algorithm][0]
-        df_100k = selected_data[selected_data['Timestep'] == 100000]
-        fig4 = go.Figure(go.Histogram(x=df_100k['Total Regret'], marker_color=colors[algorithm_data.index(selected_algorithm)]))
-        fig4.update_layout(
-            title=f'Fig. 4: Distribution of Total Regret at Time 100 000 for {selected_algorithm}',
-            xaxis_title="Total Regret",
-            yaxis_title="Count",
-            paper_bgcolor='white',
-            plot_bgcolor='white',
-            font={'color': 'black'},
-            showlegend=False
-        )
-    else:
-        # Fallback, wenn kein Algorithmus ausgewählt ist
-        fig4 = go.Figure()
+    # if selected_algorithm:
+    #     selected_data = data[selected_algorithm][0]
+    #     df_100k = selected_data[selected_data['Timestep'] == 100000]
+    #     fig4 = go.Figure(go.Histogram(x=df_100k['Total Regret'], marker_color=colors[algorithm_data.index(selected_algorithm)]))
+    #     fig4.update_layout(
+    #         title=f'Fig. 4: Distribution of Total Regret at Time 100 000 for {selected_algorithm}',
+    #         xaxis_title="Total Regret",
+    #         yaxis_title="Count",
+    #         paper_bgcolor='white',
+    #         plot_bgcolor='white',
+    #         font={'color': 'black'},
+    #         showlegend=False
+    #     )
+    # else:
+    #     # Fallback, wenn kein Algorithmus ausgewählt ist
+    #     fig4 = go.Figure()
 
 
     # Plot 5: Value at Risk Function
