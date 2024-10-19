@@ -187,26 +187,21 @@ app.layout = html.Div(
                                 ),
                             ]
                         ),
-                        # Div für den output-container
-                                html.Div(
-                                    id='output-container', 
-                                    children=[
-                                        html.Label('Selected Algorithms'),
-                                        dcc.Checklist(
-                                            options=[
-                                                {'label': data["meta"]["value"], 'value': data["meta"]["value"]}
-                                                for data in algorithm_design.values()
-                                            ] + [
-                                                {'label': algo["label"], 'value': algo["value"]}
-                                                for group in algorithm_design.values()
-                                                for algo in group["algorithms"]
-                                            ],
-                                            value=[data["meta"]["value"] for data in algorithm_design.values()],  # Default selected groups
-                                            id='algorithm-checklist',  # Unique ID for the checklist
-                                            inline=True
-                                        )
-                                    ]
-                        )
+                        html.Div([
+                            html.Label(
+                                group["meta"]["value"],
+                                style={"color": group["meta"]["color"]}
+                            ),
+                            dcc.Dropdown(
+                                id=f"{group_key}_dropdown",
+                                options=[
+                                    {"label": algo["label"], "value": algo["value"]}
+                                    for algo in group["algorithms"]
+                                ],
+                                multi=True,
+                                placeholder=f"Select {group['meta']['value']} algorithms"
+                            )
+                        ]) for group_key, group in algorithm_design.items()
                     ]
                 ),
                 # Rechte Seite mit Plots
@@ -230,7 +225,96 @@ app.layout = html.Div(
         )
     ]
 )
-
+                # Linke Navigationsleiste
+                html.Div(
+                    style={'flex': '1', 'padding': '20px', 'backgroundColor': '#f0f0f0'},
+                    children=[
+                        html.H2("Settings"),
+                        html.Div(
+                            children=[
+                                html.Label('Distribution of Arms: [optimal arm, suboptimal arm]'),
+                                dcc.Dropdown(
+                                    id='arm_distribution',
+                                    options=[
+                                        {'label': '[0.9, 0.8]', 'value': '1'},
+                                        {'label': '[0.9, 0.895]', 'value': '2'},
+                                        {'label': '[0.5, 0.495]', 'value': '3'}
+                                    ],
+                                    placeholder='Select...',
+                                    clearable=False,
+                                    value='1'
+                                ),
+                                html.Label('Order of Arms'),
+                                dcc.Dropdown(
+                                    id='first_move',
+                                    options=[
+                                        {'label': '(optimal arm, suboptimal arm)', 'value': 'opt'},
+                                        {'label': '(suboptimal arm, optimal arm)', 'value': 'subopt'}
+                                    ],
+                                    placeholder='Select...',
+                                    clearable=False,
+                                    value='opt'
+                                ),
+                                html.Label('Alpha for Fig. 5'),
+                                dcc.Dropdown(
+                                    id='alpha',
+                                    options=[
+                                        {'label': '0.01', 'value': '0.01'},
+                                        {'label': '0.05', 'value': '0.05'},
+                                        {'label': '0.1', 'value': '0.1'}
+                                    ],
+                                    placeholder='Select...',
+                                    clearable=False,
+                                    value='0.05'
+                                ),
+                                html.Label('Algorithm for Fig. 4'),
+                                dcc.Dropdown(
+                                    id='selected_algorithm',
+                                    options=[],  # Zunächst leeres Dropdown, wird durch Callback gefüllt
+                                    placeholder='Select...',
+                                    clearable=False,
+                                    value=None  # Initial kein Wert ausgewählt
+                                ),
+                            ]
+                        ),
+                        html.Div([
+                            html.Label(
+                                group["meta"]["value"],
+                                style={"color": group["meta"]["color"]}
+                            ),
+                            dcc.Dropdown(
+                                id=f"{group_key}_dropdown",
+                                options=[
+                                    {"label": algo["label"], "value": algo["value"]}
+                                    for algo in group["algorithms"]
+                                ],
+                                multi=True,
+                                placeholder=f"Select {group['meta']['value']} algorithms"
+                            )
+                        ]) for group_key, group in algorithm_design.items()
+                    ]
+                )
+                # Rechte Seite mit Plots
+                html.Div(
+                    style={'flex': '4', 'padding': '20px'},
+                    children=[
+                        html.Div(
+                            style={'display': 'flex', 'flexWrap': 'wrap'},
+                            children=[
+                                html.Div(style={'flex': '1 1 30%', 'padding': '10px'}, children=[dcc.Graph(id='plot1')]),
+                                html.Div(style={'flex': '1 1 30%', 'padding': '10px'}, children=[dcc.Graph(id='plot2')]),
+                                html.Div(style={'flex': '1 1 30%', 'padding': '10px'}, children=[dcc.Graph(id='plot3')]),
+                                html.Div(style={'flex': '1 1 30%', 'padding': '10px'}, children=[dcc.Graph(id='plot4')]),
+                                html.Div(style={'flex': '1 1 30%', 'padding': '10px'}, children=[dcc.Graph(id='plot5')]),
+                                html.Div(style={'flex': '1 1 30%', 'padding': '10px'}, children=[dcc.Graph(id='plot6')])
+                            ]
+                        )
+                    ]
+                )
+            ]
+        )
+    ]
+)
 
 # # Layout der App
 # app.layout = html.Div(
