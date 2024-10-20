@@ -21,82 +21,26 @@ algorithms = {
     "Variance-aware UCB Variations": ["5_UCB-Tuned", "6_UCB-V", "9_EUCBV"]
 }
 
-# Define the design (color and line style) for groups and algorithms
-algorithm_design = {
-    "Standard Algorithms": {
-        "meta": {"value": "Standard Algorithms", "color": "#58D3F7", "line_style": "solid"},
-        "algorithms": [
-            {"label": "1_ETC", "value": "1_ETC", "color": "#58D3F7", "line_style": "solid"},
-            {"label": "2_Greedy", "value": "2_Greedy", "color": "#58D3F7", "line_style": "solid"},
-            {"label": "3_UCB", "value": "3_UCB", "color": "#58D3F7", "line_style": "solid"},
-            {"label": "4_UCB-Normal", "value": "4_UCB-Normal", "color": "#58D3F7", "line_style": "solid"},
-        ],
-    },
-    "Not-variance-aware UCB Variations": {
-        "meta": {"value": "Not-variance-aware UCB Variations", "color": "#FE2E9A", "line_style": "dot"},
-        "algorithms": [
-            {"label": "7_PAC-UCB", "value": "7_PAC-UCB", "color": "#FE2E9A", "line_style": "dot"},
-            {"label": "8_UCB-Improved", "value": "8_UCB-Improved", "color": "#FE2E9A", "line_style": "dot"},
-        ],
-    },
-    "Variance-aware UCB Variations": {
-        "meta": {"value": "Variance-aware UCB Variations", "color": "#D7DF01", "line_style": "dash"},
-        "algorithms": [
-            {"label": "5_UCB-Tuned", "value": "5_UCB-Tuned", "color": "#D7DF01", "line_style": "dash"},
-            {"label": "6_UCB-V", "value": "6_UCB-V", "color": "#D7DF01", "line_style": "dash"},
-            {"label": "9_EUCBV", "value": "9_EUCBV", "color": "#D7DF01", "line_style": "dash"},
-        ],
-    },
-}
-
-# Alle Algorithmen extrahieren
-#all_algorithms = [algo["value"] for group in algorithm_design.values() for algo in group["algorithms"]]
-
-all_algorithms = [
-    {
-        "label": algo["label"],
-        "value": algo["value"],
-        "color": algo["color"],
-        "line_style": algo["line_style"]
-    }
-    for group in algorithm_design.values()
-    for algo in group["algorithms"]
-] + [
-    {
-        "label": group["meta"]["value"],
-        "value": group_key,
-        "color": group["meta"]["color"],
-        "line_style": group["meta"]["line_style"]
-    }
-    for group_key, group in algorithm_design.items()
-]
-
 algorithm_data = [
-    {"label": "Standard Algorithms", "value": "Standard Algorithms", "color": "#58D3F7", "line_style": "solid"},
-    {"label": "1_ETC", "value": "1_ETC", "color": "#58D3F7", "line_style": "solid"},
-    {"label": "2_Greedy", "value": "2_Greedy", "color": "#58D3F7", "line_style": "solid"},
-    {"label": "3_UCB", "value": "3_UCB", "color": "#58D3F7", "line_style": "solid"},
-    {"label": "4_UCB-Normal", "value": "4_UCB-Normal", "color": "#58D3F7", "line_style": "solid"},
+    {"label": "Standard Algorithms", "value": "Standard Algorithms", "color": "#00FF00", "line_style": "solid"},
+    {"label": "1_ETC", "value": "1_ETC", "color": "#32CD32", "line_style": "solid"},
+    {"label": "2_Greedy", "value": "2_Greedy", "color": "#9ACD32", "line_style": "solid"},
+    {"label": "3_UCB", "value": "3_UCB", "color": "#6B8E23", "line_style": "solid"},
+    {"label": "4_UCB-Normal", "value": "4_UCB-Normal", "color": "#808000", "line_style": "solid"},
     
-    {"label": "Not-variance-aware UCB Variations", "value": "Not-variance-aware UCB Variations", "color": "#FE2E9A", "line_style": "dot"},
-    {"label": "7_PAC-UCB", "value": "7_PAC-UCB", "color": "#FE2E9A", "line_style": "dot"},
-    {"label": "8_UCB-Improved", "value": "8_UCB-Improved", "color": "#FE2E9A", "line_style": "dot"},
+    {"label": "Not-variance-aware UCB Variations", "value": "Not-variance-aware UCB Variations", "color": "#00CED1", "line_style": "dot"},
+    {"label": "7_PAC-UCB", "value": "7_PAC-UCB", "color": "#00BFFF", "line_style": "dot"},
+    {"label": "8_UCB-Improved", "value": "8_UCB-Improved", "color": "#4169E1", "line_style": "dot"},
 
-    {"label": "Variance-aware UCB Variations", "value": "Variance-aware UCB Variations", "color": "#D7DF01", "line_style": "dash"},
-    {"label": "5_UCB-Tuned", "value": "5_UCB-Tuned", "color": "#D7DF01", "line_style": "dash"},
-    {"label": "6_UCB-V", "value": "6_UCB-V", "color": "#D7DF01", "line_style": "dash"},
-    {"label": "9_EUCBV", "value": "9_EUCBV", "color": "#D7DF01", "line_style": "dash"}
+    {"label": "Variance-aware UCB Variations", "value": "Variance-aware UCB Variations", "color": "#BC8F8F", "line_style": "dash"},
+    {"label": "5_UCB-Tuned", "value": "5_UCB-Tuned", "color": "#DAA520", "line_style": "dash"},
+    {"label": "6_UCB-V", "value": "6_UCB-V", "color": "#D2691E", "line_style": "dash"},
+    {"label": "9_EUCBV", "value": "9_EUCBV", "color": "#800000", "line_style": "dash"}
 ]
 
-colors = [
-    "#58D3F7", "#58D3F7", "#58D3F7", "#58D3F7",
-    "#D7DF01", "#D7DF01", "#FE2E9A", "#FE2E9A", "#D7DF01", "#58D3F7", "#FE2E9A", "#D7DF01"
-]
+colors = [ "#00FF00", "#32CD32", "#9ACD32", "#6B8E23", "#808000", "#00CED1", "#00BFFF", "#4169E1", "#BC8F8F", "#DAA520", "#D2691E", "#800000"]
 
-line_styles = [
-    "solid", "solid", "solid", "solid",
-    "dash", "dash", "dot", "dot", "dash", "solid", "dot", "dash"
-]
+line_styles = [ "solid", "solid", "solid", "solid", "solid", "dot", "dot", "dot", "dash", "dash", "dash", "dash" ]
 
 # Dummy-Plot Funktion
 def create_dummy_plot(title):
@@ -183,31 +127,12 @@ app.layout = html.Div(
                                 html.Label('Algorithm for Fig. 4'),
                                 dcc.Dropdown(
                                     id='selected_algorithm',
-                                    # hier noch ursprüngliches algorithm_data einbauen und erweitern
                                     options=[{'label': algo['label'], 'value': algo['value']} for algo in algorithm_data],  
                                     placeholder='Select...',
                                     clearable=False,
                                     value='3_UCB'  
                                 ),
                                 *[
-                                    # html.Div([
-                                    #     html.Label(
-                                    #         group["meta"]["value"],
-                                    #         style={"color": group["meta"]["color"]}
-                                    #     ),
-                                    #     dcc.Checklist(
-                                    #         id=f"{group_key}_checklist",
-                                    #         options=[
-                                    #             {"label": group["meta"]["value"], "value": group_key}  # Add group name as an option
-                                    #         ] + [
-                                    #             {"label": algo["label"], "value": algo["value"]}
-                                    #             for algo in group["algorithms"]
-                                    #         ],
-                                    #         value=[],  # Default selected values
-                                    #         labelStyle={'display': 'block'}
-                                    #     )
-                                    # ]) for group_key, group in algorithm_design.items()
-
                                     html.Div([
                                         html.Label(
                                             algo["label"],
@@ -225,27 +150,6 @@ app.layout = html.Div(
                                 ],
                             ]
                         ),
-                        html.H2("Legend"),
-                        html.Ul(
-                            children=[
-                                # Schleife über die Gruppen und Algorithmen
-                                item
-                                for group in algorithm_design.values()
-                                for item in (
-                                    [html.Li(
-                                        group["meta"]["value"],
-                                        style={"color": group["meta"]["color"]}
-                                    )] +
-                                    [html.Li(
-                                        algo["label"],
-                                        style={"color": algo["color"]}
-                                    ) for algo in group["algorithms"]]
-                                )
-                            ]
-                        )
-
-
-
                     ]
                 ),
                 # Rechte Seite mit Plots
@@ -269,19 +173,6 @@ app.layout = html.Div(
         )
     ]
 )
-
-# def update_dropdown(selected_algorithms):
-#     # Dropdown-Optionen auf alle Algorithmen setzen
-#     return [{'label': algo, 'value': algo} for algo in algorithm_data]
-
-# @app.callback(
-#     Output('selected_algorithm', 'options'),
-#     [Input(f"{group_key}_checklist", 'value') for group_key in algorithm_design.keys()]
-# )
-# def update_algorithm_dropdown(*args):
-#     selected_algorithms = [algo for group_values in args for algo in group_values]
-#     return update_dropdown(selected_algorithms)
-
 
 # Callback zum Aktualisieren der Plots
 @app.callback(
@@ -329,7 +220,7 @@ def update_plots(*args):
         yaxis_title="Average Total Reward",
         paper_bgcolor='white',
         plot_bgcolor='white',
-        font={'color': 'black'},
+        font={'color': 'black', "size": 8},
         showlegend=False
     )
 
@@ -350,7 +241,7 @@ def update_plots(*args):
         yaxis_title="Average Total Regret",
         paper_bgcolor='white',
         plot_bgcolor='white',
-        font={'color': 'black'},
+        font={'color': 'black', "size": 8},
         showlegend=False
     )
 
@@ -360,8 +251,10 @@ def update_plots(*args):
     # Datenstrukturen zum Speichern der Werte
     zeros_counts = []
     ones_counts = []
-    algo_labels_zeros = []
-    algo_labels_ones = []
+    algo_labels= []
+    colors_zeros = []
+    colors_ones = []
+
 
     # Durchlaufe die Algorithmen
     for algo in selected_algorithms:
@@ -377,23 +270,33 @@ def update_plots(*args):
         ones_counts.append(one_count)
         
         # Erstellen der Labels für die X-Achse
-        algo_labels_zeros.append(f'{algo} - Zeros')
-        algo_labels_ones.append(f'{algo} - Ones')
+        algo_labels.append(algo)
+
+        # Extrahieren der Farbe des Algorithmus
+        algo_data = next((a for a in algorithm_data if a["value"] == algo), None)
+        if algo_data:
+            colors_zeros.append(algo_data["color"])
+            colors_ones.append(algo_data["color"])
+
 
     # Erstellen der Balken für die Average Zeros Count
     fig3.add_trace(go.Bar(
-        x=algo_labels_zeros,
+        #x=algo_labels_zeros,
+        x=algo_labels,
         y=zeros_counts,
         name='Average Zeros Count',
-        marker_color='blue'
+        marker_color=colors_zeros,
+        text=None  # Entfernen der Beschreibungen
     ))
 
     # Erstellen der Balken für die Average Ones Count
     fig3.add_trace(go.Bar(
-        x=algo_labels_ones,
+        #x=algo_labels_ones,
+        x=algo_labels,
         y=ones_counts,
         name='Average Ones Count',
-        marker_color='orange'
+        marker_color=colors_ones,
+        text=None  # Entfernen der Beschreibungen
     ))
 
     # Layout-Anpassungen
@@ -403,59 +306,42 @@ def update_plots(*args):
         yaxis_title='Count',
         barmode='group',
         xaxis=dict(
-            tickvals=list(range(len(algo_labels_zeros) + len(algo_labels_ones))),
-            ticktext=algo_labels_zeros + algo_labels_ones,
+            tickvals=list(range(len(algo_labels))),
+            ticktext=algo_labels,
             tickangle=45
-        )
+        ),
+        font={'color': 'black', "size": 8},
+        showlegend=False  # Legende ausblenden
     )
 
     # Plot 4: Distribution of Total Regret at Timestep 100000
-    # selected_data = data[selected_algorithm][0]
-    # df_100k = selected_data[selected_data['Timestep'] == 100000]
-    # fig4 = go.Figure(go.Histogram(x=df_100k['Total Regret'], marker_color=colors[all_algorithms.index(selected_algorithm)]))
-    # fig4.update_layout(
-    #     title=f'Fig. 4: Distribution of Total Regret at Time 100 000 for {selected_algorithm}',
-    #     xaxis_title="Total Regret",
-    #     yaxis_title="Count",
-    #     paper_bgcolor='white',
-    #     plot_bgcolor='white',
-    #     font={'color': 'black'},
-    #     showlegend=False
-    # )
-    # Find the index of the selected algorithm in all_algorithms
-    selected_index = next((index for (index, d) in enumerate(all_algorithms) if d["value"] == selected_algorithm), None)
-
-    # Ensure selected_index is valid
-    if selected_index is not None:
-        selected_data = data[selected_algorithm][0]
-        df_100k = selected_data[selected_data['Timestep'] == 100000]
-        fig4 = go.Figure(go.Histogram(x=df_100k['Total Regret'], marker_color=all_algorithms[selected_index]["color"]))
-        fig4.update_layout(
-            title=f'Fig. 4: Distribution of Total Regret at Time 100 000 for {selected_algorithm}',
-            xaxis_title="Total Regret",
-            yaxis_title="Count",
-            paper_bgcolor='white',
-            plot_bgcolor='white',
-            font={'color': 'black'},
-            showlegend=False
-        )
+    selected_data = data[selected_algorithm][0]
+    df_100k = selected_data[selected_data['Timestep'] == 100000]
+    # Find the color for the selected algorithm
+    selected_algo_info = next((algo for algo in algorithm_data if algo['value'] == selected_algorithm), None)
+    if selected_algo_info:
+        selected_color = selected_algo_info['color']
     else:
-        # Handle the case where the selected_algorithm is not found
-        fig4 = go.Figure()
-        fig4.update_layout(
-            title=f'Fig. 4: Distribution of Total Regret at Time 100 000 for {selected_algorithm} (Algorithm not found)',
-            paper_bgcolor='white',
-            plot_bgcolor='white',
-            font={'color': 'black'},
-            showlegend=False
-        )
+        selected_color = 'black'  # Default color if not found
+    
+    fig4 = go.Figure(go.Histogram(x=df_100k['Total Regret'], marker_color=selected_color))
+    #fig4 = go.Figure(go.Histogram(x=df_100k['Total Regret'], marker_color=colors[algorithm_data.index(selected_algorithm)]))
+    fig4.update_layout(
+        title=f'Fig. 4: Distribution of Total Regret at t=100 000 for {selected_algorithm}',
+        xaxis_title="Total Regret",
+        yaxis_title="Count",
+        paper_bgcolor='white',
+        plot_bgcolor='white',
+        font={'color': 'black', "size": 8},
+        showlegend=False
+    )
 
     # Plot 5: Value at Risk Function
     alpha_value = float(selected_alpha)
     
     fig5 = go.Figure()
     for algo, color, line_style in zip(selected_algorithms, colors, line_styles):
-        var_file = os.path.join(var_base_path, f"{algo}_VaR_alpha_{alpha_value}.csv")
+        var_file = os.path.join(var_base_path, f"{algo}_VaR_{first_move}_ver{arm_distribution}_alpha_{alpha_value}.csv")
         df_var = pd.read_csv(var_file)
         
         fig5.add_trace(go.Scatter(
@@ -472,8 +358,8 @@ def update_plots(*args):
         yaxis_title="Value at Risk",
         paper_bgcolor='white',
         plot_bgcolor='white',
-        font={'color': 'black'},
-        showlegend=True
+        font={'color': 'black', "size": 8},
+        showlegend=False
     )
 
     # Plot 6: Fraction of Suboptimal Arms Pulled
@@ -488,12 +374,12 @@ def update_plots(*args):
             line=dict(color=color, dash=line_style)
         ))
     fig6.update_layout(
-        title='Fig. 6: Proportion of Suboptimal Arms pulled in comparison to all Arms pulled',
+        title='Fig. 6: Proportion Suboptimal Arms pulled / all Arms pulled',
         xaxis_title="Timesteps",
         yaxis_title="Proportion of Suboptimal Arms",
         paper_bgcolor='white',
         plot_bgcolor='white',
-        font={'color': 'black'},
+        font={'color': 'black', "size": 8},
         showlegend=False
     )
 
