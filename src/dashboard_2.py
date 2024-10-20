@@ -50,7 +50,43 @@ algorithm_design = {
 }
 
 # Alle Algorithmen extrahieren
-all_algorithms = [algo["value"] for group in algorithm_design.values() for algo in group["algorithms"]]
+#all_algorithms = [algo["value"] for group in algorithm_design.values() for algo in group["algorithms"]]
+
+all_algorithms = [
+    {
+        "label": algo["label"],
+        "value": algo["value"],
+        "color": algo["color"],
+        "line_style": algo["line_style"]
+    }
+    for group in algorithm_design.values()
+    for algo in group["algorithms"]
+] + [
+    {
+        "label": group["meta"]["value"],
+        "value": group_key,
+        "color": group["meta"]["color"],
+        "line_style": group["meta"]["line_style"]
+    }
+    for group_key, group in algorithm_design.items()
+]
+
+algorithm_data = [
+    {"label": "Standard Algorithms", "value": "Standard Algorithms", "color": "#58D3F7", "line_style": "solid"},
+    {"label": "1_ETC", "value": "1_ETC", "color": "#58D3F7", "line_style": "solid"},
+    {"label": "2_Greedy", "value": "2_Greedy", "color": "#58D3F7", "line_style": "solid"},
+    {"label": "3_UCB", "value": "3_UCB", "color": "#58D3F7", "line_style": "solid"},
+    {"label": "4_UCB-Normal", "value": "4_UCB-Normal", "color": "#58D3F7", "line_style": "solid"},
+    
+    {"label": "Not-variance-aware UCB Variations", "value": "Not-variance-aware UCB Variations", "color": "#FE2E9A", "line_style": "dot"},
+    {"label": "7_PAC-UCB", "value": "7_PAC-UCB", "color": "#FE2E9A", "line_style": "dot"},
+    {"label": "8_UCB-Improved", "value": "8_UCB-Improved", "color": "#FE2E9A", "line_style": "dot"},
+
+    {"label": "Variance-aware UCB Variations", "value": "Variance-aware UCB Variations", "color": "#D7DF01", "line_style": "dash"},
+    {"label": "5_UCB-Tuned", "value": "5_UCB-Tuned", "color": "#D7DF01", "line_style": "dash"},
+    {"label": "6_UCB-V", "value": "6_UCB-V", "color": "#D7DF01", "line_style": "dash"},
+    {"label": "9_EUCBV", "value": "9_EUCBV", "color": "#D7DF01", "line_style": "dash"}
+]
 
 colors = [
     "#58D3F7", "#58D3F7", "#58D3F7", "#58D3F7",
@@ -147,29 +183,45 @@ app.layout = html.Div(
                                 html.Label('Algorithm for Fig. 4'),
                                 dcc.Dropdown(
                                     id='selected_algorithm',
-                                    options=[],  
+                                    # hier noch ursprüngliches algorithm_data einbauen und erweitern
+                                    options=[{'label': algo['label'], 'value': algo['value']} for algo in algorithm_data],  
                                     placeholder='Select...',
                                     clearable=False,
-                                    value=None  
+                                    value='3_UCB'  
                                 ),
                                 *[
+                                    # html.Div([
+                                    #     html.Label(
+                                    #         group["meta"]["value"],
+                                    #         style={"color": group["meta"]["color"]}
+                                    #     ),
+                                    #     dcc.Checklist(
+                                    #         id=f"{group_key}_checklist",
+                                    #         options=[
+                                    #             {"label": group["meta"]["value"], "value": group_key}  # Add group name as an option
+                                    #         ] + [
+                                    #             {"label": algo["label"], "value": algo["value"]}
+                                    #             for algo in group["algorithms"]
+                                    #         ],
+                                    #         value=[],  # Default selected values
+                                    #         labelStyle={'display': 'block'}
+                                    #     )
+                                    # ]) for group_key, group in algorithm_design.items()
+
                                     html.Div([
                                         html.Label(
-                                            group["meta"]["value"],
-                                            style={"color": group["meta"]["color"]}
+                                            algo["label"],
+                                            style={"color": algo["color"]}
                                         ),
                                         dcc.Checklist(
-                                            id=f"{group_key}_checklist",
+                                            id=f"{algo['value']}_checklist",
                                             options=[
-                                                {"label": group["meta"]["value"], "value": group_key}  # Add group name as an option
-                                            ] + [
                                                 {"label": algo["label"], "value": algo["value"]}
-                                                for algo in group["algorithms"]
                                             ],
-                                            value=[],  # Default selected values
+                                            value=[algo["value"]],  # Default selected values
                                             labelStyle={'display': 'block'}
                                         )
-                                    ]) for group_key, group in algorithm_design.items()
+                                    ]) for algo in algorithm_data
                                 ],
                             ]
                         ),
@@ -218,39 +270,17 @@ app.layout = html.Div(
     ]
 )
 
-# Callback, um die Auswahl der Algorithmen und Gruppen zu synchronisieren
-@app.callback(
-    Output('output', 'children'),
-    Input('algorithm-selection', 'value')
-)
+# def update_dropdown(selected_algorithms):
+#     # Dropdown-Optionen auf alle Algorithmen setzen
+#     return [{'label': algo, 'value': algo} for algo in algorithm_data]
 
-def update_dropdown(selected_algorithms):
-    # Dropdown-Optionen auf die ausgewählten Algorithmen aus der Checkliste beschränken
-    if not selected_algorithms:
-        return []
-    
-    # Erstelle Optionen für das Dropdown-Menü
-    return [{'label': algo, 'value': algo} for algo in selected_algorithms]
-
-def update_selection(selected_values):
-    # Kopiere die aktuelle Auswahl
-    updated_selection = set(selected_values)
-
-    # Zeige die ausgewählten Algorithmen an
-    output = []
-    
-    # Iteriere über die ausgewählten Algorithmen
-    for algo in selected_values:
-        # Überprüfe, ob das Element kein Gruppenname ist
-        if algo not in algorithms.keys():  
-            try:
-                # Verwende nur den Algorithmusnamen zum Laden der Ergebnisse
-                df_results, df_average = load_data(algo)
-                output.append(html.Div(f"Ergebnisse für {algo}: {df_results.head()}"))  # Zeige die ersten Zeilen des DataFrames an
-            except FileNotFoundError as e:
-                output.append(html.Div(str(e)))
-
-    return output
+# @app.callback(
+#     Output('selected_algorithm', 'options'),
+#     [Input(f"{group_key}_checklist", 'value') for group_key in algorithm_design.keys()]
+# )
+# def update_algorithm_dropdown(*args):
+#     selected_algorithms = [algo for group_values in args for algo in group_values]
+#     return update_dropdown(selected_algorithms)
 
 
 # Callback zum Aktualisieren der Plots
@@ -261,18 +291,23 @@ def update_selection(selected_values):
      Output('plot4', 'figure'),
      Output('plot5', 'figure'),
      Output('plot6', 'figure')],
-    [Input('algorithm-selection', 'value'),
-     Input('selected_algorithm', 'value'),
+    [Input(f"{algo['value']}_checklist", 'value') for algo in algorithm_data] +
+    [Input('selected_algorithm', 'value'),
      Input('arm_distribution', 'value'),
      Input('first_move', 'value'),
      Input('alpha', 'value')]
 )
+def update_plots(*args):
+    selected_algorithms = [algo for algo_values in args[:len(algorithm_data)] for algo in algo_values]
+    selected_algorithm = args[len(algorithm_data)]
+    arm_distribution = args[len(algorithm_data) + 1]
+    first_move = args[len(algorithm_data) + 2]
+    selected_alpha = args[len(algorithm_data) + 3]
 
-def update_plots(selected_algorithms, selected_algorithm, arm_distribution, first_move, selected_alpha):
     #initialise empty figures
     fig1, fig2, fig3, fig4, fig5, fig6 = [go.Figure() for _ in range(6)]
 
-    # laod data
+    # load data
     data = {}
     for algo in selected_algorithms:
         data[algo] = load_data(algo, arm_distribution, first_move)
@@ -377,9 +412,9 @@ def update_plots(selected_algorithms, selected_algorithm, arm_distribution, firs
     # Plot 4: Distribution of Total Regret at Timestep 100000
     # selected_data = data[selected_algorithm][0]
     # df_100k = selected_data[selected_data['Timestep'] == 100000]
-    # fig4 = go.Figure(go.Histogram(x=df_100k['Total Regret'], marker_color=colors[algorithm_data.index(selected_algorithm)]))
+    # fig4 = go.Figure(go.Histogram(x=df_100k['Total Regret'], marker_color=colors[all_algorithms.index(selected_algorithm)]))
     # fig4.update_layout(
-    #     title=f'Fig. 4: Distribution of Total Regret at Time 100 000 for {selected_algorithms}',
+    #     title=f'Fig. 4: Distribution of Total Regret at Time 100 000 for {selected_algorithm}',
     #     xaxis_title="Total Regret",
     #     yaxis_title="Count",
     #     paper_bgcolor='white',
@@ -387,24 +422,33 @@ def update_plots(selected_algorithms, selected_algorithm, arm_distribution, firs
     #     font={'color': 'black'},
     #     showlegend=False
     # )
+    # Find the index of the selected algorithm in all_algorithms
+    selected_index = next((index for (index, d) in enumerate(all_algorithms) if d["value"] == selected_algorithm), None)
 
-    # if selected_algorithm:
-    #     selected_data = data[selected_algorithm][0]
-    #     df_100k = selected_data[selected_data['Timestep'] == 100000]
-    #     fig4 = go.Figure(go.Histogram(x=df_100k['Total Regret'], marker_color=colors[algorithm_data.index(selected_algorithm)]))
-    #     fig4.update_layout(
-    #         title=f'Fig. 4: Distribution of Total Regret at Time 100 000 for {selected_algorithm}',
-    #         xaxis_title="Total Regret",
-    #         yaxis_title="Count",
-    #         paper_bgcolor='white',
-    #         plot_bgcolor='white',
-    #         font={'color': 'black'},
-    #         showlegend=False
-    #     )
-    # else:
-    #     # Fallback, wenn kein Algorithmus ausgewählt ist
-    #     fig4 = go.Figure()
-
+    # Ensure selected_index is valid
+    if selected_index is not None:
+        selected_data = data[selected_algorithm][0]
+        df_100k = selected_data[selected_data['Timestep'] == 100000]
+        fig4 = go.Figure(go.Histogram(x=df_100k['Total Regret'], marker_color=all_algorithms[selected_index]["color"]))
+        fig4.update_layout(
+            title=f'Fig. 4: Distribution of Total Regret at Time 100 000 for {selected_algorithm}',
+            xaxis_title="Total Regret",
+            yaxis_title="Count",
+            paper_bgcolor='white',
+            plot_bgcolor='white',
+            font={'color': 'black'},
+            showlegend=False
+        )
+    else:
+        # Handle the case where the selected_algorithm is not found
+        fig4 = go.Figure()
+        fig4.update_layout(
+            title=f'Fig. 4: Distribution of Total Regret at Time 100 000 for {selected_algorithm} (Algorithm not found)',
+            paper_bgcolor='white',
+            plot_bgcolor='white',
+            font={'color': 'black'},
+            showlegend=False
+        )
 
     # Plot 5: Value at Risk Function
     alpha_value = float(selected_alpha)
@@ -453,7 +497,7 @@ def update_plots(selected_algorithms, selected_algorithm, arm_distribution, firs
         showlegend=False
     )
 
-    return fig1, fig2, fig3, fig1, fig5, fig6
+    return fig1, fig2, fig3, fig4, fig5, fig6
 
 # Start Dash App
 if __name__ == '__main__':
