@@ -45,8 +45,8 @@ def load_data(algorithm, arm_distribution, first_move):
         - df_average: DataFrame containing the average results data.
     """
 
-    results_path = os.path.join(base_path, f"{algorithm}_results_{first_move}_ver{arm_distribution}.csv")
-    average_results_path = os.path.join(base_path, f"{algorithm}_average_results_{first_move}_ver{arm_distribution}.csv")
+    results_path = os.path.join(base_path, f"{algorithm}_results_{first_move}_{arm_distribution}.csv")
+    average_results_path = os.path.join(base_path, f"{algorithm}_average_results_{first_move}_{arm_distribution}.csv")
 
     df_results = pd.read_csv(results_path)
     df_average = pd.read_csv(average_results_path)
@@ -112,13 +112,13 @@ app.layout = html.Div(
                                 dcc.Dropdown(
                                     id='arm_distribution',
                                     options=[
-                                        {'label': '[0.9, 0.8]', 'value': '1'},
-                                        {'label': '[0.9, 0.895]', 'value': '2'},
-                                        {'label': '[0.5, 0.495]', 'value': '3'}
+                                        {'label': '[0.9, 0.8]', 'value': 'ver1'},
+                                        {'label': '[0.9, 0.895]', 'value': 'ver2'},
+                                        {'label': '[0.5, 0.495]', 'value': 'ver3'}
                                     ],
                                     placeholder='Select...',  
                                     clearable=False,
-                                    value='1',
+                                    value='ver1',
                                     style={'margin-bottom': '10px'}
                                 ),
                                 # Dropdown for selecting order of arms
@@ -369,7 +369,7 @@ def update_plots(*args):
     
     fig5 = go.Figure()
     for algo in selected_algorithms:
-        var_file = os.path.join(var_base_path, f"{algo}_VaR_{first_move}_ver{arm_distribution}_alpha_{alpha_value}.csv")
+        var_file = os.path.join(var_base_path, f"{algo}_VaR_{first_move}_{arm_distribution}_alpha_{alpha_value}.csv")
         df_var = pd.read_csv(var_file)
         algo_data = next((a for a in algorithm_data if a["value"] == algo), None)
         if algo_data:
