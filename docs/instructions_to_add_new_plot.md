@@ -1,9 +1,7 @@
-# Dashboard Documentation
+# Instructions to add new plot
 
 ## Overview
 This document provides detailed instructions on how to modify and extend the dashboard, specifically focusing on adding new plots.
-
-## Adding New Plots
 
 ### Step 1: Define the New Plot
 First, you need to define the new plot in the `update_plots` function in `src/dashboard.py`. For example, if you want to add a new plot showing the cumulative reward over time, you might add something like this:
