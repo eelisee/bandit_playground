@@ -1,6 +1,6 @@
 todo:
-code comments
-algorithms verallgemeinert abrufen
-weitere durchläufe für andere Parameter
+code comments für algorithmen
+allgemeine run funktion für alle algorithmen
+weitere durchläufe für andere Parameter + dann in doku ergänzen
 add all file names into plot-visualization-test.py + tests
-Doku (readme)
+Doku readme (mit verweis auf wo was finden) + setup instructions zusammenfassen
