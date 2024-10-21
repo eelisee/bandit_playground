@@ -88,8 +88,38 @@ app.layout = html.Div(
                     children=[
                         html.H2("Settings"),
                         html.Div(
+                            style={'flex': '1', 'backgroundColor': '#f0f0f0'},
                             children=[
-                                html.Label('Distribution of Arms: [optimal arm, suboptimal arm]'),
+                                *[
+                                    html.Div(
+                                    style={'margin-bottom': '20px'},  # Abstände nur hinter der letzten Checkliste
+                                    children=[
+                                        html.Div([
+                                            dcc.Checklist(
+                                                id=f"{algo['value']}_checklist",
+                                                options=[
+                                                    {"label": algo["label"], "value": algo["value"]}
+                                                ],
+                                                value=[algo["value"]],  # Default selected values
+                                                labelStyle={
+                                                    "color": algo["color"],
+                                                    'display': 'block',
+                                                    "margin-left": "20px" if "1_ETC" in algo["value"] or 
+                                                                    "2_Greedy" in algo["value"] or 
+                                                                    "3_UCB" in algo["value"] or 
+                                                                    "4_UCB-Normal" in algo["value"] or 
+                                                                    "7_PAC-UCB" in algo["value"] or 
+                                                                    "8_UCB-Improved" in algo["value"] or
+                                                                    "5_UCB-Tuned" in algo["value"] or 
+                                                                    "6_UCB-V" in algo["value"] or 
+                                                                    "9_EUCBV" in algo["value"] else "0px"
+                                                }
+                                            )
+                                        ]) for algo in algorithm_data
+                                    ]
+                                    )
+                                ],
+                                html.Label('Distribution of Arms: [optimal arm, suboptimal arm]', style={'margin-top': '10px'}),
                                 dcc.Dropdown(
                                     id='arm_distribution',
                                     options=[
@@ -99,9 +129,10 @@ app.layout = html.Div(
                                     ],
                                     placeholder='Select...',  
                                     clearable=False,
-                                    value='1'
+                                    value='1',
+                                    style={'margin-bottom': '10px'}
                                 ),
-                                html.Label('Order of Arms'),
+                                html.Label('Order of Arms', style={'margin-top': '10px'}),
                                 dcc.Dropdown(
                                     id='first_move',
                                     options=[
@@ -110,9 +141,10 @@ app.layout = html.Div(
                                     ],
                                     placeholder='Select...',  
                                     clearable=False,
-                                    value='opt'
+                                    value='opt',
+                                    style={'margin-bottom': '10px'}
                                 ),
-                                html.Label('Alpha for Fig. 5'),
+                                html.Label('Alpha for Fig. 5', style={'margin-top': '10px'}),
                                 dcc.Dropdown(
                                     id='alpha',
                                     options=[
@@ -122,32 +154,18 @@ app.layout = html.Div(
                                     ],
                                     placeholder='Select...',  
                                     clearable=False,
-                                    value='0.05'
+                                    value='0.05',
+                                    style={'margin-bottom': '10px'}
                                 ),
-                                html.Label('Algorithm for Fig. 4'),
+                                html.Label('Algorithm for Fig. 4', style={'margin-top': '10px'}),
                                 dcc.Dropdown(
                                     id='selected_algorithm',
                                     options=[{'label': algo['label'], 'value': algo['value']} for algo in algorithm_data],  
                                     placeholder='Select...',
                                     clearable=False,
-                                    value='3_UCB'  
+                                    value='3_UCB',
+                                    style={'margin-bottom': '10px'}
                                 ),
-                                *[
-                                    html.Div([
-                                        html.Label(
-                                            algo["label"],
-                                            style={"color": algo["color"]}
-                                        ),
-                                        dcc.Checklist(
-                                            id=f"{algo['value']}_checklist",
-                                            options=[
-                                                {"label": algo["label"], "value": algo["value"]}
-                                            ],
-                                            value=[algo["value"]],  # Default selected values
-                                            labelStyle={'display': 'block'}
-                                        )
-                                    ]) for algo in algorithm_data
-                                ],
                             ]
                         ),
                     ]
