@@ -36,20 +36,22 @@ def update_plots(*args):
     return fig1, fig2, fig3, fig4, fig5, fig6, fig7 # add new figure here
 ```
 
-
-Step 2: Update the Layout
+### Step 2: Update the Layout
 Next, you need to update the layout of the dashboard to include the new plot. This involves modifying the layout section of the Dash app to add a new dcc.Graph component for the new plot.
 
+```python
 app.layout = html.Div([
     # Existing layout components...
 
     # New plot component
-    dcc.Graph(id='cumulative-reward-plot', figure=fig7)
+    html.Div(style={'flex': '1 1 30%', 'padding': '10px'}, children=[dcc.Graph(id='plot7')]) # add
 ])
+```
 
-Step 3: Update the Callback
+### Step 3: Update the Callback
 Ensure that the callback function that updates the plots includes the new plot. Modify the callback to return the new figure.
 
+```python
 @app.callback(
     [Output('plot1', 'figure'),
      Output('plot2', 'figure'),
@@ -57,27 +59,19 @@ Ensure that the callback function that updates the plots includes the new plot. 
      Output('plot4', 'figure'),
      Output('plot5', 'figure'),
      Output('plot6', 'figure'),
-     Output('cumulative-reward-plot', 'figure')],
+     Output('plot7', 'figure')], # add
     [Input('some-input', 'value')]
 )
-def update_output(value):
-    # Existing plot updates...
+```
 
-    fig7 = update_plots(value)[6]  # Assuming fig7 is the 7th plot
-
-    return fig1, fig2, fig3, fig4, fig5, fig6, fig7
-
-Step 4: Test the New Plot
+### Step 4: Test the New Plot
 Finally, run the dashboard and verify that the new plot appears as expected.
 
-python [dashboard.py](http://_vscodecontentref_/#%7B%22uri%22%3A%7B%22%24mid%22%3A1%2C%22fsPath%22%3A%22%2FUsers%2Fcanis%2FDocuments%2Fcoding%2Fbandit_playground%2Fsrc%2Fdashboard.py%22%2C%22path%22%3A%22%2FUsers%2Fcanis%2FDocuments%2Fcoding%2Fbandit_playground%2Fsrc%2Fdashboard.py%22%2C%22scheme%22%3A%22file%22%7D%7D)
+```bash
+python src/dashboard.py
+```
 
 Open your browser and go to http://127.0.0.1:8050 to see the new plot in action.
 
-Conclusion
-By following these steps, you can add new plots to the dashboard, enhancing its functionality and providing more insights into the performance of the algorithms.
-
-For further details on adding new algorithms and generating data for the plots, refer to the setup_instructions.md file.
-
-
-This file provides a clear and detailed guide on how to add new plots to the dashboard, making it easier for other developers to extend its functionality.
+## Conclusion
+By following these steps, you can add new plots to the dashboard, enhancing its functionality and providing more insights into the performance of the algorithms. For further details on adding new algorithms and generating data for the plots, refer to the other instruction files.
