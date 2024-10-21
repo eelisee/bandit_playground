@@ -19,7 +19,7 @@ This document provides step-by-step instructions to add a new algorithm to the r
 3. Implement your algorithm in the new file. Ensure you follow the repository's coding standards and include necessary comments and documentation:
 
 #### Step 2.2: Run Algorithm for Different Scenarios
-1. Ensure your algorithm is run in the standard scenarios: `opt`, `subopt` in combination with versions `1`, `2`, `3` for different arm distributions as described and others listed in in `documentation_scenarios.md`
+1. Ensure your algorithm is run in the standard scenarios: `opt`, `subopt` in combination with versions `1`, `2`, `3` for different arm distributions as described and others listed in in `documentation.md`
 3. Define the combinations:
     ```python
     combinations = [
@@ -59,7 +59,7 @@ This document provides step-by-step instructions to add a new algorithm to the r
 
 ### Step 4: Update Documentation
 1. Navigate to the `docs` directory.
-2. Update the documentation file `documentation_algorithms.md` to include information about your new algorithm.
+2. Update the documentation file `documentation.md` to include information about your new algorithm.
 3. Ensure you provide a detailed description, usage examples, and any necessary diagrams or illustrations.
 
 ### Step 5: Commit and Push Changes
