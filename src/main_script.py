@@ -4,8 +4,11 @@ import csv
 from itertools import permutations
 from utils.bandit_algorithm import BanditAlgorithm
 from utils.simulation_utils import general_simulation
-from calculations_for_dashboard.value_at_risk import run_value_at_risk
-from calculations_for_dashboard.calculate_averages import run_average_calculations
+#from calculations_for_dashboard.value_at_risk import run_value_at_risk
+#from calculations_for_dashboard.calculate_averages import run_average_calculations
+#from calculations_for_dashboard.calculate_averages import main as calculate_averages_main
+
+
 
 # Import simulation functions for each algorithm
 from algorithms.ETC import ETC_simulation
@@ -27,7 +30,7 @@ algorithm_strategy_pairs = [
     (BanditAlgorithm("ETC"), {"strategy_fn": ETC_simulation, "params": {"exploration_rounds": 1000}}),
     (BanditAlgorithm("Greedy"), {"strategy_fn": Greedy_simulation, "params": {"epsilon": 0.05}}),
     (BanditAlgorithm("UCB"), {"strategy_fn": UCB_simulation, "params": {}}),
-    (BanditAlgorithm("UCB-Normal"), {"strategy_fn": UCB_Normal_simulation, "params": {"arm_variances": np.array([0.249975, 0.25])}}),
+    #(BanditAlgorithm("UCB-Normal"), {"strategy_fn": UCB_Normal_simulation, "params": {"arm_variances": np.array([0.249975, 0.25])}}),
     (BanditAlgorithm("UCB-Tuned"), {"strategy_fn": UCB_Tuned_simulation, "params": {}}),
     (BanditAlgorithm("UCB-V"), {"strategy_fn": UCB_V_simulation, "params": {"theta": 1, "c": 1, "b": 1}}),
     (BanditAlgorithm("PAC-UCB"), {"strategy_fn": PAC_UCB_simulation, "params": {"c": 1, "b": 1, "q": 1.3, "beta": 0.05}}),
@@ -42,7 +45,7 @@ algorithms = [alg.name for alg, _ in algorithm_strategy_pairs]
 algorithm_groups = {
     "Variance-aware UCB Variations": ["UCB-Tuned", "UCB-V", "EUCBV"],
     "Not-variance-aware UCB Variations": ["PAC-UCB", "UCB-Improved"],
-    "Standard Algorithms": ["ETC", "Greedy", "UCB", "UCB-Normal"]
+    "Standard Algorithms": ["ETC", "Greedy", "UCB"]
 }
 
 # Unique arm combinations
@@ -144,7 +147,12 @@ for algorithm, strategy in algorithm_strategy_pairs:
 # run_value_at_risk(algorithms, algorithm_groups, combinations, alpha_values, base_path, output_path)
 
 # Run average calculations
-run_average_calculations(algorithm_groups, [comb[1] for comb in combinations], base_path)
+#run_average_calculations(algorithm_groups, [comb[1] for comb in combinations], base_path)
+
+# Other parts of your script here
+
+# Call the averaging process for all algorithms
+#calculate_averages_main()
 
 # Call the Value at Risk calculation function
-run_value_at_risk(algorithms, algorithm_groups, [comb[1] for comb in combinations], alpha_values, base_path, output_path)
+#run_value_at_risk(algorithms, algorithm_groups, [comb[1] for comb in combinations], alpha_values, base_path, output_path)

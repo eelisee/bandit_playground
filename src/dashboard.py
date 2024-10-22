@@ -20,7 +20,7 @@ algorithm_data = [
     {"label": "ETC", "value": "ETC", "color": "#32CD32", "line_style": "solid"},
     {"label": "Greedy", "value": "Greedy", "color": "#9ACD32", "line_style": "solid"},
     {"label": "UCB", "value": "UCB", "color": "#6B8E23", "line_style": "solid"},
-    {"label": "UCB-Normal", "value": "UCB-Normal", "color": "#808000", "line_style": "solid"},
+    #{"label": "UCB-Normal", "value": "UCB-Normal", "color": "#808000", "line_style": "solid"},
     
     {"label": "Not-variance-aware UCB Variations", "value": "Not-variance-aware UCB Variations", "color": "#00CED1", "line_style": "dot"},
     {"label": "PAC-UCB", "value": "PAC-UCB", "color": "#00BFFF", "line_style": "dot"},
@@ -32,7 +32,8 @@ algorithm_data = [
     {"label": "EUCBV", "value": "EUCBV", "color": "#800000", "line_style": "dash"}
 ]
 
-def load_data(algorithm, arm_distribution, first_move):
+def load_data(algorithm, arm_distribution):
+    #def load_data(algorithm, arm_distribution, first_move):
     """
     Loads results and average results data for a specified algorithm and arm distribution.
     Parameters:
@@ -45,8 +46,8 @@ def load_data(algorithm, arm_distribution, first_move):
         - df_average: DataFrame containing the average results data.
     """
 
-    results_path = os.path.join(base_path, f"{algorithm}_results_{first_move}_{arm_distribution}.csv")
-    average_results_path = os.path.join(base_path, f"{algorithm}_average_results_{first_move}_{arm_distribution}.csv")
+    results_path = os.path.join(base_path, f"{algorithm}_results_{arm_distribution}.csv")
+    average_results_path = os.path.join(base_path, f"{algorithm}_average_results_{arm_distribution}.csv")
 
     df_results = pd.read_csv(results_path)
     df_average = pd.read_csv(average_results_path)
@@ -95,7 +96,7 @@ app.layout = html.Div(
                                                     "margin-left": "20px" if "ETC" in algo["value"] or 
                                                                     "Greedy" in algo["value"] or 
                                                                     "UCB" in algo["value"] or 
-                                                                    "UCB-Normal" in algo["value"] or 
+                                                                    #"UCB-Normal" in algo["value"] or 
                                                                     "PAC-UCB" in algo["value"] or 
                                                                     "UCB-Improved" in algo["value"] or
                                                                     "UCB-Tuned" in algo["value"] or 
@@ -108,32 +109,32 @@ app.layout = html.Div(
                                     )
                                 ],
                                 # Dropdown for selecting arm distribution
-                                html.Label('Distribution of Arms: [optimal arm, suboptimal arm]', style={'margin-top': '10px'}),
+                                html.Label('Distribution of Arms', style={'margin-top': '10px'}),
                                 dcc.Dropdown(
                                     id='arm_distribution',
                                     options=[
-                                        {'label': '[0.9, 0.8]', 'value': 'ver1'},
-                                        {'label': '[0.9, 0.895]', 'value': 'ver2'},
-                                        {'label': '[0.5, 0.495]', 'value': 'ver3'}
+                                        {'label': '[0.9, 0.8, 0.7]', 'value': '900_800_700'},
+                                        {'label': '[0.9, 0.85, 0.8]', 'value': '900_850_800'},
+                                        {'label': '[0.9, 0.8]', 'value': '900_800'},
                                     ],
                                     placeholder='Select...',  
                                     clearable=False,
-                                    value='ver1',
+                                    value='900_800_700',
                                     style={'margin-bottom': '10px'}
                                 ),
                                 # Dropdown for selecting order of arms
-                                html.Label('Order of Arms', style={'margin-top': '10px'}),
-                                dcc.Dropdown(
-                                    id='first_move',
-                                    options=[
-                                        {'label': '(optimal arm, suboptimal arm)', 'value': 'opt'},
-                                        {'label': '(suboptimal arm, optimal arm)', 'value': 'subopt'}
-                                    ],
-                                    placeholder='Select...',  
-                                    clearable=False,
-                                    value='opt',
-                                    style={'margin-bottom': '10px'}
-                                ),
+                                # html.Label('Order of Arms', style={'margin-top': '10px'}),
+                                # dcc.Dropdown(
+                                #     id='first_move',
+                                #     options=[
+                                #         {'label': '(optimal arm, suboptimal arm)', 'value': 'opt'},
+                                #         {'label': '(suboptimal arm, optimal arm)', 'value': 'subopt'}
+                                #     ],
+                                #     placeholder='Select...',  
+                                #     clearable=False,
+                                #     value='opt',
+                                #     style={'margin-bottom': '10px'}
+                                #),
                                 # Dropdown for selecting alpha value
                                 html.Label('Alpha for Fig. 5', style={'margin-top': '10px'}),
                                 dcc.Dropdown(
@@ -195,7 +196,7 @@ app.layout = html.Div(
     [Input(f"{algo['value']}_checklist", 'value') for algo in algorithm_data] +
     [Input('selected_algorithm', 'value'),
      Input('arm_distribution', 'value'),
-     Input('first_move', 'value'),
+     #Input('first_move', 'value'),
      Input('alpha', 'value')]
 )
 
@@ -207,7 +208,7 @@ def update_plots(*args):
         - selected_algorithms (list): List of selected algorithms.
         - selected_algorithm (str): The algorithm selected for specific plots.
         - arm_distribution (str): The distribution of arms.
-        - first_move (str): The first move parameter.
+        #- first_move (str): The first move parameter.
         - selected_alpha (float): The alpha value for the Value at Risk plot.
     Returns:
     tuple: A tuple containing six plotly.graph_objects.Figure objects:
@@ -223,8 +224,8 @@ def update_plots(*args):
     selected_algorithms = [algo for algo_values in args[:len(algorithm_data)] for algo in algo_values]
     selected_algorithm = args[len(algorithm_data)]
     arm_distribution = args[len(algorithm_data) + 1]
-    first_move = args[len(algorithm_data) + 2]
-    selected_alpha = args[len(algorithm_data) + 3]
+    #first_move = args[len(algorithm_data) + 2]
+    selected_alpha = args[len(algorithm_data) + 2]
 
     # Initialize empty figures
     fig1, fig2, fig3, fig4, fig5, fig6 = [go.Figure() for _ in range(6)]
@@ -232,7 +233,8 @@ def update_plots(*args):
     # Load data for each selected algorithm
     data = {}
     for algo in selected_algorithms:
-        data[algo] = load_data(algo, arm_distribution, first_move)
+        #data[algo] = load_data(algo, arm_distribution, first_move)
+        data[algo] = load_data(algo, arm_distribution)
 
     # Plot 1: Average Total Reward
     fig1 = go.Figure()
@@ -369,7 +371,7 @@ def update_plots(*args):
     
     fig5 = go.Figure()
     for algo in selected_algorithms:
-        var_file = os.path.join(var_base_path, f"{algo}_VaR_{first_move}_{arm_distribution}_alpha_{alpha_value}.csv")
+        var_file = os.path.join(var_base_path, f"{algo}_VaR_{arm_distribution}_alpha_{alpha_value}.csv")
         df_var = pd.read_csv(var_file)
         algo_data = next((a for a in algorithm_data if a["value"] == algo), None)
         if algo_data:

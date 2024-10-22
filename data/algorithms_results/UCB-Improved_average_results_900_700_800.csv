@@ -1,0 +1,4 @@
+Timestep,Average Total Reward,Average Suboptimal Arms,Average Regret,Average Zeros Count,Average Ones Count
+2,1.73,1.0,0.14999999999999955,0.27,1.73
+3,2.5,2.0,0.29999999999999893,0.5,2.5
+100,82.205,55.67,8.065000000000008,17.795,82.205
