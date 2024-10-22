@@ -3,6 +3,10 @@ import os
 import csv
 from utils.bandit_algorithm import BanditAlgorithm
 from utils.simulation_utils import general_simulation
+from calculations_for_dashboard.value_at_risk import run_value_at_risk
+from calculations_for_dashboard.calculate_averages import run_average_calculations
+
+# Import simulation functions for each algorithm
 from algorithms.ETC import ETC_simulation
 #from algorithms.Greedy import Greedy_simulation
 #from algorithms.UCB import UCB_simulation
@@ -29,11 +33,17 @@ algorithm_strategy_pairs = [
     (BanditAlgorithm("EUCBV"), {"strategy_fn": EUCBV_simulation, "params": {"rho": 0.5}})
 ]
 
-# Results path
-results_path = r'/Users/canis/Documents/coding/bandit_playground/data/algorithms_results'
-if not os.path.exists(results_path):
-    os.makedirs(results_path)  # Ensure directory exists
-    print(f"Created directory: {results_path}")
+# Algorithm names
+algorithms = [alg.name for alg, _ in algorithm_strategy_pairs]
+
+# Algorithm group definitions, add algorithms to the respective groups here
+algorithm_groups = {
+    "Variance-aware UCB Variations": ["UCB-Tuned", "UCB-V", "EUCBV"],
+    #"Not-variance-aware UCB Variations": ["PAC-UCB", "UCB-Improved"],
+    #"Standard Algorithms": ["ETC", "Greedy", "UCB", "UCB-Normal"]
+    "Not-variance-aware UCB Variations": [],
+    "Standard Algorithms": []
+}
 
 # Unique arm combinations
 unique_arm_combinations = [
@@ -42,29 +52,53 @@ unique_arm_combinations = [
     np.array([0.5, 0.495])
 ]
 
-# Perform simulation and save results for each algorithm
-for algorithm, strategy in algorithm_strategy_pairs:
+# Define alpha values and combinations
+alpha_values = [0.01, 0.05, 0.1]
+def generate_combinations(unique_arm_combinations):
+    combinations = []
     for i, arm_means in enumerate(unique_arm_combinations):
-        version = f'ver{i+1}'
         for j in range(2):
             if j == 1:
                 arm_means = arm_means[::-1]  # Interchange first and second value
             opt_subopt = 'opt' if arm_means[0] > arm_means[1] else 'subopt'
+            combinations.append(f"{opt_subopt}_ver{i+1}")
+    return combinations
 
-            print(f"Running simulation for {algorithm.name} with arm means {arm_means} and strategy {strategy['strategy_fn'].__name__}")
-            general_simulation(algorithm, arm_means, time_horizons, strategy["strategy_fn"], **strategy["params"])
+combinations = generate_combinations(unique_arm_combinations)
 
-            # Save detailed results to CSV
-            detailed_results_path = f'{results_path}/{algorithm.name}_results_{opt_subopt}_{version}.csv'
-            algorithm.save_results_to_csv(detailed_results_path)
-            print(f"Saved detailed results to {detailed_results_path}")
+# Base paths
+base_path = os.path.join(os.getcwd(), 'data', 'algorithms_results')
+output_path = os.path.join(base_path, "Value_at_Risk")
 
-            # Calculate and save average results to CSV
-            avg_results = algorithm.calculate_average_results()
-            avg_results_path = f'{results_path}/{algorithm.name}_average_results_{opt_subopt}_{version}.csv'
-            with open(avg_results_path, mode='w', newline='') as file:
-                writer = csv.writer(file)
-                writer.writerow(['Timestep', 'Average Total Reward', 'Average Suboptimal Arms', 'Average Regret', 'Average Zeros Count', 'Average Ones Count'])
-                for result in avg_results:
-                    writer.writerow(result)
-            print(f"Saved average results to {avg_results_path}")
+# # Perform simulation and save results for each algorithm
+# for algorithm, strategy in algorithm_strategy_pairs:
+#     for i, arm_means in enumerate(unique_arm_combinations):
+#         version = f'ver{i+1}'
+#         for j in range(2):
+#             if j == 1:
+#                 arm_means = arm_means[::-1]  # Interchange first and second value
+#             opt_subopt = 'opt' if arm_means[0] > arm_means[1] else 'subopt'
+
+#             print(f"Running simulation for {algorithm.name} with arm means {arm_means} and strategy {strategy['strategy_fn'].__name__}")
+#             general_simulation(algorithm, arm_means, time_horizons, strategy["strategy_fn"], **strategy["params"])
+
+#             # Save detailed results to CSV
+#             detailed_results_path = f'{base_path}/{algorithm.name}_results_{opt_subopt}_ver{i+1}.csv'
+#             algorithm.save_results_to_csv(detailed_results_path)
+#             print(f"Saved detailed results to {detailed_results_path}")
+
+#             # Calculate and save average results to CSV
+#             avg_results = algorithm.calculate_average_results()
+#             avg_results_path = f'{base_path}/{algorithm.name}_average_results_{opt_subopt}_ver{i+1}.csv'
+#             with open(avg_results_path, mode='w', newline='') as file:
+#                 writer = csv.writer(file)
+#                 writer.writerow(['Timestep', 'Average Total Reward', 'Average Suboptimal Arms', 'Average Regret', 'Average Zeros Count', 'Average Ones Count'])
+#                 for result in avg_results:
+#                     writer.writerow(result)
+#             print(f"Saved average results to {avg_results_path}")
+
+# Run average calculations
+run_average_calculations(algorithm_groups, combinations, base_path)
+
+# Call the Value at Risk calculation function
+#run_value_at_risk(algorithms, algorithm_groups, combinations, alpha_values, base_path, output_path)
