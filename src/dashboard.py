@@ -17,19 +17,19 @@ var_base_path = os.path.join(os.getcwd(), "data", "algorithms_results", "Value_a
 # Algorithms, add new algorithms here
 algorithm_data = [
     {"label": "Standard Algorithms", "value": "Standard Algorithms", "color": "#00FF00", "line_style": "solid"},
-    {"label": "1_ETC", "value": "1_ETC", "color": "#32CD32", "line_style": "solid"},
-    {"label": "2_Greedy", "value": "2_Greedy", "color": "#9ACD32", "line_style": "solid"},
-    {"label": "3_UCB", "value": "3_UCB", "color": "#6B8E23", "line_style": "solid"},
-    {"label": "4_UCB-Normal", "value": "4_UCB-Normal", "color": "#808000", "line_style": "solid"},
+    {"label": "ETC", "value": "ETC", "color": "#32CD32", "line_style": "solid"},
+    {"label": "Greedy", "value": "Greedy", "color": "#9ACD32", "line_style": "solid"},
+    {"label": "UCB", "value": "UCB", "color": "#6B8E23", "line_style": "solid"},
+    {"label": "UCB-Normal", "value": "UCB-Normal", "color": "#808000", "line_style": "solid"},
     
     {"label": "Not-variance-aware UCB Variations", "value": "Not-variance-aware UCB Variations", "color": "#00CED1", "line_style": "dot"},
-    {"label": "7_PAC-UCB", "value": "7_PAC-UCB", "color": "#00BFFF", "line_style": "dot"},
-    {"label": "8_UCB-Improved", "value": "8_UCB-Improved", "color": "#4169E1", "line_style": "dot"},
+    {"label": "PAC-UCB", "value": "PAC-UCB", "color": "#00BFFF", "line_style": "dot"},
+    {"label": "UCB-Improved", "value": "UCB-Improved", "color": "#4169E1", "line_style": "dot"},
 
     {"label": "Variance-aware UCB Variations", "value": "Variance-aware UCB Variations", "color": "#BC8F8F", "line_style": "dash"},
-    {"label": "5_UCB-Tuned", "value": "5_UCB-Tuned", "color": "#DAA520", "line_style": "dash"},
-    {"label": "6_UCB-V", "value": "6_UCB-V", "color": "#D2691E", "line_style": "dash"},
-    {"label": "9_EUCBV", "value": "9_EUCBV", "color": "#800000", "line_style": "dash"}
+    {"label": "UCB-Tuned", "value": "UCB-Tuned", "color": "#DAA520", "line_style": "dash"},
+    {"label": "UCB-V", "value": "UCB-V", "color": "#D2691E", "line_style": "dash"},
+    {"label": "EUCBV", "value": "EUCBV", "color": "#800000", "line_style": "dash"}
 ]
 
 def load_data(algorithm, arm_distribution, first_move):
@@ -92,15 +92,15 @@ app.layout = html.Div(
                                                 labelStyle={
                                                     "color": algo["color"],
                                                     'display': 'block',
-                                                    "margin-left": "20px" if "1_ETC" in algo["value"] or 
-                                                                    "2_Greedy" in algo["value"] or 
-                                                                    "3_UCB" in algo["value"] or 
-                                                                    "4_UCB-Normal" in algo["value"] or 
-                                                                    "7_PAC-UCB" in algo["value"] or 
-                                                                    "8_UCB-Improved" in algo["value"] or
-                                                                    "5_UCB-Tuned" in algo["value"] or 
-                                                                    "6_UCB-V" in algo["value"] or 
-                                                                    "9_EUCBV" in algo["value"] else "0px"
+                                                    "margin-left": "20px" if "ETC" in algo["value"] or 
+                                                                    "Greedy" in algo["value"] or 
+                                                                    "UCB" in algo["value"] or 
+                                                                    "UCB-Normal" in algo["value"] or 
+                                                                    "PAC-UCB" in algo["value"] or 
+                                                                    "UCB-Improved" in algo["value"] or
+                                                                    "UCB-Tuned" in algo["value"] or 
+                                                                    "UCB-V" in algo["value"] or 
+                                                                    "EUCBV" in algo["value"] else "0px"
                                                 }
                                             )
                                         ]) for algo in algorithm_data

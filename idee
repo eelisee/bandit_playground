@@ -1,6 +1,4 @@
 todo:
-code comments für algorithmen
-allgemeine run funktion für alle algorithmen
-weitere durchläufe für andere Parameter + dann in doku ergänzen
+weitere durchläufe für andere Parameter (bis 1 Mio, andere Bandits was passiert bei mehreren armen? + dann in doku ergänzen
 add all file names into plot-visualization-test.py + tests
 Doku readme (mit verweis auf wo was finden) + setup instructions zusammenfassen
