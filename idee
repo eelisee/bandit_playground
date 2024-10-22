@@ -1,4 +1,5 @@
 todo:
-weitere durchläufe für andere Parameter (bis 1 Mio, andere Bandits was passiert bei mehreren armen? + dann in doku ergänzen
+weitere durchläufe für andere Parameter (bis 1 Mio, andere Bandits was passiert bei mehreren armen? + dann in doku ergänzen, namen ergänzen, alle funktionen zum abrufen (dashboard, var, averages umschreiben notationen, doku)
+
 add all file names into plot-visualization-test.py + tests
 Doku readme (mit verweis auf wo was finden) + setup instructions zusammenfassen
