@@ -14,7 +14,7 @@ from utils.simulation_utils import general_simulation
 from algorithms.ETC import ETC_simulation
 from algorithms.Greedy import Greedy_simulation
 from algorithms.UCB import UCB_simulation
-from algorithms.UCB_Normal import UCB_Normal_simulation
+#from algorithms.UCB_Normal import UCB_Normal_simulation
 from algorithms.UCB_Tuned import UCB_Tuned_simulation
 from algorithms.UCB_V import UCB_V_simulation
 from algorithms.PAC_UCB import PAC_UCB_simulation
@@ -22,13 +22,21 @@ from algorithms.UCB_Improved import UCB_Improved_simulation
 from algorithms.EUCBV import EUCBV_simulation
 
 # Parameters
-time_horizons = [2, 3, 100, 200, 2000, 10000, 20000, 40000, 60000, 80000, 100000]
-time_horizons = [2, 3, 100] #, 200, 2000, 10000, 20000, 40000, 60000, 80000, 100000]
+time_horizons = [2, 3, 100, 200, 2000, 10000, 20000, 40000, 60000, 80000, 100000, 200000, 400000, 600000, 800000, 1000000]
+#time_horizons = [2, 3, 100] #, 200, 2000, 10000, 20000, 40000, 60000, 80000, 100000]
 
 # List of algorithms and their corresponding strategies
 algorithm_strategy_pairs = [
     (BanditAlgorithm("ETC"), {"strategy_fn": ETC_simulation, "params": {"exploration_rounds": 1000}}),
+    # (BanditAlgorithm("ETC"), {"strategy_fn": ETC_simulation, "params": {"exploration_rounds": 100}}),
+    # (BanditAlgorithm("ETC"), {"strategy_fn": ETC_simulation, "params": {"exploration_rounds": 10}}),
+    # (BanditAlgorithm("ETC"), {"strategy_fn": ETC_simulation, "params": {"exploration_rounds": 10000}}),
+    # (BanditAlgorithm("ETC"), {"strategy_fn": ETC_simulation, "params": {"exploration_rounds": 100000}}),
     (BanditAlgorithm("Greedy"), {"strategy_fn": Greedy_simulation, "params": {"epsilon": 0.05}}),
+    # (BanditAlgorithm("Greedy"), {"strategy_fn": Greedy_simulation, "params": {"epsilon": 0.5}}),
+    # (BanditAlgorithm("Greedy"), {"strategy_fn": Greedy_simulation, "params": {"epsilon": 0.1}}),
+    # (BanditAlgorithm("Greedy"), {"strategy_fn": Greedy_simulation, "params": {"epsilon": 0.005}}),
+    # (BanditAlgorithm("Greedy"), {"strategy_fn": Greedy_simulation, "params": {"epsilon": 0.01}}),
     (BanditAlgorithm("UCB"), {"strategy_fn": UCB_simulation, "params": {}}),
     #(BanditAlgorithm("UCB-Normal"), {"strategy_fn": UCB_Normal_simulation, "params": {"arm_variances": np.array([0.249975, 0.25])}}),
     (BanditAlgorithm("UCB-Tuned"), {"strategy_fn": UCB_Tuned_simulation, "params": {}}),
@@ -52,9 +60,21 @@ algorithm_groups = {
 unique_arm_combinations = [
     np.array([0.9, 0.8, 0.7]),
     np.array([0.9, 0.85, 0.8]),
+    np.array([0.9, 0.9, 0.8]),
+    np.array([0.9, 0.85, 0.85]),
+    np.array([0.9, 0.895, 0.8]),
+    np.array([0.9, 0.895, 0.89]),
+    np.array([0.9, 0.6, 0.3]),
     np.array([0.9, 0.8]),
-    #np.array([0.9, 0.895]),
-    #np.array([0.5, 0.495])
+    np.array([0.9, 0.6]),
+    np.array([0.9, 0.3]),
+    np.array([0.9, 0.7]),
+    np.array([0.9, 0.85]),
+    np.array([0.9, 0.89]),
+    np.array([0.9, 0.895]),
+    np.array([0.5, 0.495]),
+    np.array([0.5, 0.49]),
+    np.array([0.5, 0.48]),
 ]
 
 # Define alpha values
