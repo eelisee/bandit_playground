@@ -61,8 +61,7 @@ alpha_values = [0.01, 0.05, 0.1]
 # Define the possible individual arm values
 individual_arm_distribution = [0.9, 0.895, 0.89, 0.85, 0.8]
 
-
-########## do not modify below this line ##########
+################ do not modify below this line ##################
 
 # Signal handler for graceful shutdown on Ctrl + C
 def signal_handler(sig, frame):
@@ -79,6 +78,7 @@ combinations = generate_combinations(individual_arm_distribution)
 base_path = os.path.join(os.getcwd(), 'data', 'algorithms_results')
 output_path = os.path.join(base_path, "Value_at_Risk")
 
+
 # Algorithm names
 algorithms = [alg.name for alg, _ in algorithm_strategy_pairs]
 
@@ -87,46 +87,21 @@ def create_directory(path):
     if not os.path.exists(path):
         os.makedirs(path)
 
-# # Perform simulation and save results for each algorithm
-# def run_simulation(algorithm, strategy, combinations, time_horizons):
-#     """
-#     Runs a simulation for a given algorithm and strategy over multiple combinations of arm means and time horizons.
-#     Parameters:
-#     algorithm (object): The algorithm object that will be used for the simulation. It should have methods `name`, `save_results_to_csv`, and `calculate_average_results`.
-#     strategy (dict): A dictionary containing the strategy function and its parameters. It should have keys:
-#         - 'strategy_fn' (function): The strategy function to be used in the simulation.
-#         - 'params' (dict): A dictionary of parameters to be passed to the strategy function.
-#     combinations (list of tuples): A list of tuples where each tuple contains:
-#         - arm_means (list): A list of means for the arms in the bandit problem.
-#         - combination_name (str): A name for the combination of arm means.
-#     time_horizons (list): A list of time horizons over which the simulation will be run.
-#     Returns:
-#     None
-#     """
+# Create directory based on algorithm name and parameters
+def get_directory_for_algorithm(algorithm, params):
+    algorithm_dir = os.path.join(base_path, algorithm.name)
 
-#     for arm_means, combination_name in combinations:
-#         param_name = "_".join(f"{k}_{str(v).replace('.', '_')}" for k, v in strategy["params"].items())
-#         if not param_name:
-#             param_name = "default"
-        
-#         # Path based on algorithm name and parameters
-#         output_dir = os.path.join(base_path, algorithm.name, param_name)
-#         create_directory(output_dir)
-
-#         print(f"Running simulation for {algorithm.name} with arm means {arm_means} and strategy {strategy['strategy_fn'].__name__}")
-
-#         # Run simulation
-#         general_simulation(algorithm, arm_means, time_horizons, strategy["strategy_fn"], **strategy["params"])
-
-#         # Save detailed results to CSV
-#         detailed_results_path = os.path.join(output_dir, f'results_{combination_name}.csv')
-#         algorithm.save_results_to_csv(detailed_results_path)
-#         print(f"Saved detailed results to {detailed_results_path}")
-
-#         # Calculate and save average results to CSV
-#         avg_results = algorithm.calculate_average_results()
-#         avg_results_path = os.path.join(output_dir, f'average_results_{combination_name}.csv')
-#         save_average_results(avg_results, avg_results_path)
+    # Dynamically generate parameter directory by iterating over params
+    if params:
+        param_dir = '_'.join([f'{key}_{str(value).replace('.', '_')}' for key, value in params.items()])
+    else:
+        param_dir = 'default'
+    
+    # Construct full directory path and create it if necessary
+    full_dir = os.path.join(algorithm_dir, param_dir)
+    create_directory(full_dir)
+    
+    return full_dir
 
 # Perform simulation and save results for each algorithm
 def run_simulation_inner(algorithm, strategy, arm_means, combination_name, time_horizons):
@@ -135,14 +110,17 @@ def run_simulation_inner(algorithm, strategy, arm_means, combination_name, time_
     # Run the simulation
     general_simulation(algorithm, arm_means, time_horizons, strategy["strategy_fn"], **strategy["params"])
 
+    # Get the directory for this algorithm and strategy
+    results_dir = get_directory_for_algorithm(algorithm, strategy["params"])
+
     # Save detailed results to CSV
-    detailed_results_path = f'{base_path}/{algorithm.name}_results_{combination_name}.csv'
+    detailed_results_path = os.path.join(results_dir, f'results_{combination_name}.csv')
     algorithm.save_results_to_csv(detailed_results_path)
     print(f"Saved detailed results to {detailed_results_path}")
 
     # Calculate and save average results to CSV
     avg_results = algorithm.calculate_average_results()
-    avg_results_path = f'{base_path}/{algorithm.name}_average_results_{combination_name}.csv'
+    avg_results_path = os.path.join(results_dir, f'average_results_{combination_name}.csv')
     save_average_results(avg_results, avg_results_path)
 
 def run_simulation(algorithm, strategy, combinations, time_horizons):
@@ -157,15 +135,7 @@ def run_simulation(algorithm, strategy, combinations, time_horizons):
 def save_average_results(avg_results, path):
     """
     Save the average results to a CSV file.
-    Parameters:
-    avg_results (list of lists): A list where each sublist contains the average results for each timestep.
-                                 Each sublist should have the following structure:
-                                 [timestep, avg_total_reward, avg_suboptimal_arms, avg_regret, avg_zeros_count, avg_ones_count]
-    path (str): The file path where the CSV file will be saved.
-    Returns:
-    None
     """
-
     with open(path, mode='w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(['Timestep', 'Average Total Reward', 'Average Suboptimal Arms', 'Average Regret', 'Average Zeros Count', 'Average Ones Count'])
@@ -190,9 +160,6 @@ if __name__ == '__main__':
                 future.result()
     except KeyboardInterrupt:
         print("Execution stopped by user.")
-
-    # with Pool() as pool:
-    #     pool.starmap(run_simulation, [(algorithm, strategy, combinations, time_horizons) for algorithm, strategy in algorithm_strategy_pairs])
 
 # # Run average calculations
 # run_average_calculations(algorithm_groups, combinations, base_path)
