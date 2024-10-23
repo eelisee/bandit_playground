@@ -2,6 +2,8 @@ import numpy as np
 import os
 import csv
 from itertools import permutations
+from multiprocessing import Pool
+
 from utils.bandit_algorithm import BanditAlgorithm
 from utils.simulation_utils import general_simulation
 #from calculations_for_dashboard.value_at_risk import run_value_at_risk
@@ -28,7 +30,7 @@ time_horizons = [2, 3, 100, 200, 2000, 10000, 20000, 40000, 60000, 80000, 100000
 # List of algorithms and their corresponding strategies
 algorithm_strategy_pairs = [
     (BanditAlgorithm("ETC"), {"strategy_fn": ETC_simulation, "params": {"exploration_rounds": 1000}}),
-    # (BanditAlgorithm("ETC"), {"strategy_fn": ETC_simulation, "params": {"exploration_rounds": 100}}),
+    # (BanditAlgorithm("ETC"), {"strategy_fn": ETC_simulation, "params": {"exploration_rounds": 100}}), # achtung, hier noch keine bezeichung, um auf parameter bezug zu nehmen
     # (BanditAlgorithm("ETC"), {"strategy_fn": ETC_simulation, "params": {"exploration_rounds": 10}}),
     # (BanditAlgorithm("ETC"), {"strategy_fn": ETC_simulation, "params": {"exploration_rounds": 10000}}),
     # (BanditAlgorithm("ETC"), {"strategy_fn": ETC_simulation, "params": {"exploration_rounds": 100000}}),
@@ -38,7 +40,7 @@ algorithm_strategy_pairs = [
     # (BanditAlgorithm("Greedy"), {"strategy_fn": Greedy_simulation, "params": {"epsilon": 0.005}}),
     # (BanditAlgorithm("Greedy"), {"strategy_fn": Greedy_simulation, "params": {"epsilon": 0.01}}),
     (BanditAlgorithm("UCB"), {"strategy_fn": UCB_simulation, "params": {}}),
-    #(BanditAlgorithm("UCB-Normal"), {"strategy_fn": UCB_Normal_simulation, "params": {"arm_variances": np.array([0.249975, 0.25])}}),
+    #(BanditAlgorithm("UCB-Normal"), {"strategy_fn": UCB_Normal_simulation, "params": {"arm_variances": np.array([0.249975, 0.25])}}), # nicht möglich für arm_variance (algorithmus anders implementieren)
     (BanditAlgorithm("UCB-Tuned"), {"strategy_fn": UCB_Tuned_simulation, "params": {}}),
     (BanditAlgorithm("UCB-V"), {"strategy_fn": UCB_V_simulation, "params": {"theta": 1, "c": 1, "b": 1}}),
     (BanditAlgorithm("PAC-UCB"), {"strategy_fn": PAC_UCB_simulation, "params": {"c": 1, "b": 1, "q": 1.3, "beta": 0.05}}),
@@ -60,6 +62,7 @@ algorithm_groups = {
 unique_arm_combinations = [
     np.array([0.9, 0.8, 0.7]),
     np.array([0.9, 0.85, 0.8]),
+    #np.array([0.9, 0.85, 0.7]),
     np.array([0.9, 0.9, 0.8]),
     np.array([0.9, 0.85, 0.85]),
     np.array([0.9, 0.895, 0.8]),
@@ -138,7 +141,7 @@ output_path = os.path.join(base_path, "Value_at_Risk")
 #             print(f"Saved average results to {avg_results_path}")
 
 # Perform simulation and save results for each algorithm
-for algorithm, strategy in algorithm_strategy_pairs:
+def run_simulation(algorithm, strategy, combinations, time_horizons):
     for arm_means, combination_name in combinations:
         print(f"Running simulation for {algorithm.name} with arm means {arm_means} and strategy {strategy['strategy_fn'].__name__}")
         
@@ -153,12 +156,18 @@ for algorithm, strategy in algorithm_strategy_pairs:
         # Calculate and save average results to CSV
         avg_results = algorithm.calculate_average_results()
         avg_results_path = f'{base_path}/{algorithm.name}_average_results_{combination_name}.csv'
-        with open(avg_results_path, mode='w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(['Timestep', 'Average Total Reward', 'Average Suboptimal Arms', 'Average Regret', 'Average Zeros Count', 'Average Ones Count'])
-            for result in avg_results:
-                writer.writerow(result)
-        print(f"Saved average results to {avg_results_path}")
+
+def save_average_results(avg_results, path):
+    with open(path, mode='w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(['Timestep', 'Average Total Reward', 'Average Suboptimal Arms', 'Average Regret', 'Average Zeros Count', 'Average Ones Count'])
+        for result in avg_results:
+            writer.writerow(result)
+    print(f"Saved average results to {path}")
+
+if __name__ == '__main__':
+    with Pool() as pool:
+        pool.starmap(run_simulation, [(algorithm, strategy, combinations, time_horizons) for algorithm, strategy in algorithm_strategy_pairs])
 
 # # Run average calculations
 # run_average_calculations(algorithm_groups, combinations, base_path)
