@@ -7,37 +7,48 @@ This repository contains the implementation of various multi-armed bandit algori
 The following algorithms are implemented, each with its own set of tuning parameters:
 
 - **ETC (Explore-then-Commit)**: Explores all available arms for a certain number of rounds before committing to the arm with the highest estimated reward.
-  - Tuning Parameters: None
+   - Tuning Parameters: `exploration_rounds`
+   - Scenarios:
+      - `exploration_rounds`: 10
+      - `exploration_rounds`: 100
+      - `exploration_rounds`: 1000
+      - `exploration_rounds`: 10000
+      - `exploration_rounds`: 100000
 
 - **Epsilon-Greedy**: Balances exploration and exploitation by choosing a random action with probability epsilon and the action with the highest estimated reward with probability \(1 - \epsilon\).
-  - Tuning Parameters: `epsilon`
+   - Tuning Parameters: `epsilon`
+   - Scenarios:
+      - `epsilon`: 0.05
+      - `epsilon`: 0.5
+      - `epsilon`: 0.1
+      - `epsilon`: 0.005
+      - `epsilon`: 0.01
 
 - **UCB (Upper Confidence Bound)**: Selects the arm with the highest upper confidence bound to balance exploration and exploitation.
-  - Tuning Parameters: None
-
-- **UCB-Normal**: A variant of UCB designed for normally distributed rewards.
-  - Tuning Parameters: None
+   - Tuning Parameters: None
 
 - **UCB-Tuned**: Adjusts the confidence bound by considering the variance of the rewards.
-  - Tuning Parameters: None
+   - Tuning Parameters: None
 
 - **UCB-V**: Incorporates variance estimates into the upper confidence bounds.
-  - Tuning Parameters: None
+   - Tuning Parameters: `theta`, `c`, `b`
+   - Scenarios:
+      - `theta`: 1, `c`: 1, `b`: 1
 
 - **PAC-UCB**: Guarantees with high probability that the regret is close to the optimal policy.
-  - Tuning Parameters: None
+   - Tuning Parameters: `c`, `b`, `q`, `beta`
+   - Scenarios:
+      - `c`: 1, `b`: 1, `q`: 1.3, `beta`: 0.05
 
 - **UCB-Improved**: Enhances UCB with more sophisticated exploration strategies.
-  - Tuning Parameters: None
+   - Tuning Parameters: `delta`
+   - Scenarios:
+      - `delta`: 1
 
 - **EUCBV (Efficient-UCB with Variance)**: Uses empirical estimates of variance to adjust the upper confidence bounds.
-  - Tuning Parameters: `rho`
-
-- **Not Variance Aware**: A combined result of algorithms that do not consider variance.
-  - Tuning Parameters: None
-
-- **Variance Aware**: A combined result of algorithms that consider variance.
-  - Tuning Parameters: None
+   - Tuning Parameters: `rho`
+   - Scenarios:
+      - `rho`: 0.5
 
 
 ## Bandit Model
