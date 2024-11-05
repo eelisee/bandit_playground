@@ -9,7 +9,7 @@ import os
 from main_script import individual_arm_distribution, algorithm_strategy_pairs, get_directory_for_algorithm, create_directory, algorithm_groups
 
 # Initialise Dash App
-app = dash.Dash(__name__)
+app = dash.Dash(__name__, suppress_callback_exceptions=True)
 app.title = "Simulation of variance-aware algorithms for Stochastic Bandit Problems"
 
 # Basis path
@@ -34,46 +34,84 @@ algorithm_data = [
     {"label": "EUCBV", "value": "EUCBV", "color": "#800000", "line_style": "dash"}
 ]
 
+# Helper function to find color and line style
+def find_algorithm_style(algo_name):
+    for algo in algorithm_data:
+        if algo["value"] == algo_name:
+            return algo["color"], algo["line_style"]
+    return "#000000", "solid"  # Default color and line style
+
 # 1. Parse the algorithms from main_script.py
 def get_algorithm_data():
     algo_data = []
-    for algo, config in algorithm_strategy_pairs:
+    for index, (algo, config) in enumerate(algorithm_strategy_pairs):
         algo_name = algo.name
         params = config["params"]
         label = algo_name
-        color = algorithm_data.get(algo_name, "#000000")  # Default color black if not defined, hier überelegen wie algorithm_data implementiert in main_script mit color und line_style
-        line_style = algorithm_data.get(algo_name, "solid")  # Default to solid line style
+        color, line_style = find_algorithm_style(algo_name)  # Use helper function
         
         algo_data.append({
             "label": label,  # This is updated dynamically with parameters later
             "value": algo_name,
             "color": color,
             "line_style": line_style,
-            "params": params  # Store params for later use
+            "params": params,  # Store params for later use
+            "index": index  # Add index to ensure unique IDs
         })
     return algo_data
 
 algorithm_data = get_algorithm_data()
+
+# # Generate unique IDs for parameter popups
+# def generate_param_popup_id(algo_name, param_name, index):
+#     return f"{algo_name}_{param_name}_{index}_param_popup"
 
 def get_label_with_params(algo_name, params):
     param_str = ", ".join([f"{k}={v}" for k, v in params.items()])
     return f"{algo_name} ({param_str})"
 
 # Create directory based on algorithm name and parameters
-def get_directory_for_algorithm(algorithm, params):
-    algorithm_dir = os.path.join(base_path, algorithm.name)
+# def get_directory_for_algorithm(algorithm, params):
+#     algorithm_dir = os.path.join(base_path, algorithm.name)
 
-    # Dynamically generate parameter directory by iterating over params
-    if params:
-        param_dir = '_'.join([f'{key}_{str(value).replace('.', '_')}' for key, value in params.items()])
-    else:
-        param_dir = 'default'
+#     # Dynamically generate parameter directory by iterating over params
+#     if params:
+#         param_dir = '_'.join([f'{key}_{str(value).replace('.', '_')}' for key, value in params.items()])
+#     else:
+#         param_dir = 'default'
     
-    # Construct full directory path and create it if necessary
-    full_dir = os.path.join(algorithm_dir, param_dir)
-    create_directory(full_dir)
+#     # Construct full directory path and create it if necessary
+#     full_dir = os.path.join(algorithm_dir, param_dir)
+#     create_directory(full_dir)
     
-    return full_dir
+#     return full_dir
+
+# Function to generate parameter selection popups
+# def show_params(selected_algorithms):
+#     algo_params_divs = []
+    
+#     for algo in algorithm_data:
+#         algo_name = algo["value"]
+#         params = algo["params"]
+#         index = algo["index"]
+#         if algo_name in selected_algorithms and params:  # Only show popup if algorithm is selected and has params
+#             # Generate a dropdown for each param
+#             param_selectors = []
+#             for param, default_value in params.items():
+#                 param_selectors.append(
+#                     html.Div([
+#                         html.Label(f"Select {param} for {algo_name}"),
+#                         dcc.Dropdown(
+#                             id=generate_param_popup_id(algo_name, param, index),
+#                             options=[{"label": str(default_value), "value": default_value}],
+#                             value=default_value,
+#                         )
+#                     ])
+#                 )
+#             algo_params_divs.append(html.Div(param_selectors))
+
+#     return algo_params_divs
+
 
 # def load_data(algorithm, arm_distribution):
 #     #def load_data(algorithm, arm_distribution, first_move):
@@ -97,13 +135,58 @@ def get_directory_for_algorithm(algorithm, params):
 
 #     return df_results, df_average
 
-# Updated load_data function
-def load_data(algorithm, arm_1, arm_2, arm_3):
+# # Updated load_data function
+# def load_data(algorithm_with_index, arm_1, arm_2, arm_3):
+#     """
+#     Loads results and average results data for a specified algorithm and arm distribution.
+    
+#     Parameters:
+#     algorithm (str): The name of the algorithm for which to load data.
+#     arm_1 (str): The selected value for the first arm distribution.
+#     arm_2 (str): The selected value for the second arm distribution.
+#     arm_3 (str): The selected value for the third arm distribution (can be "-").
+    
+#     Returns:
+#     tuple: A tuple containing two pandas DataFrames:
+#         - df_results: DataFrame containing the results data.
+#         - df_average: DataFrame containing the average results data.
+#     """
+    
+#     algorithm = algorithm_with_index.split('_')[0]
+#     # Combine arm distributions into a string for the file name
+#     if arm_3 == '-':
+#         arm_distribution = f"{arm_1}_{arm_2}"
+#     else:
+#         arm_distribution = f"{arm_1}_{arm_2}_{arm_3}"
+
+#     # Find the corresponding algorithm configuration
+#     algo_config = next((config for algo, config in algorithm_strategy_pairs if algo.name == algorithm), None)
+#     if not algo_config:
+#         raise ValueError(f"No configuration found for algorithm: {algorithm}")
+
+#     # Generate the parameter directory string
+#     params = algo_config["params"]
+#     param_dir = '_'.join([f'{key}_{str(value).replace(".", "_")}' for key, value in params.items()])
+
+#     # Construct the directory path based on the algorithm and parameters
+#     results_dir = os.path.join(base_path, algorithm, param_dir)
+    
+#     # Load results and average results
+#     results_path = os.path.join(results_dir, f"results_{arm_distribution}.csv")
+#     average_results_path = os.path.join(results_dir, f"average_results_{arm_distribution}.csv")
+
+#     df_results = pd.read_csv(results_path)
+#     df_average = pd.read_csv(average_results_path)
+
+#     return df_results, df_average
+
+
+def load_data(algorithm_with_index, arm_1, arm_2, arm_3):
     """
     Loads results and average results data for a specified algorithm and arm distribution.
     
     Parameters:
-    algorithm (str): The name of the algorithm for which to load data.
+    algorithm_with_index (str): The name of the algorithm with index (e.g., "UCB_0").
     arm_1 (str): The selected value for the first arm distribution.
     arm_2 (str): The selected value for the second arm distribution.
     arm_3 (str): The selected value for the third arm distribution (can be "-").
@@ -114,25 +197,67 @@ def load_data(algorithm, arm_1, arm_2, arm_3):
         - df_average: DataFrame containing the average results data.
     """
     
+    # Extract the actual algorithm name from the combined string
+    algorithm = algorithm_with_index.split('_')[0]
+    
     # Combine arm distributions into a string for the file name
-    if arm_3 == '-':
+    if arm_3 == '-' or arm_3 is None:
         arm_distribution = f"{arm_1}_{arm_2}"
     else:
         arm_distribution = f"{arm_1}_{arm_2}_{arm_3}"
 
-    results_dir = get_directory_for_algorithm(algorithm, strategy["params"])
+    # Find the corresponding algorithm configuration
+    algo_config = next((config for algo, config in algorithm_strategy_pairs if algo.name == algorithm), None)
+    if not algo_config:
+        raise ValueError(f"No configuration found for algorithm: {algorithm}")
+
+    # Generate the parameter directory string
+    params = algo_config["params"]
+    if params:
+        param_dir = '_'.join([f'{key}_{str(value).replace(".", "_")}' for key, value in params.items()])
+    else:
+        param_dir = 'default'
+
+    # Construct the directory path based on the algorithm and parameters
+    results_dir = os.path.join(base_path, algorithm, param_dir)
     
     # Load results and average results
     results_path = os.path.join(results_dir, f"results_{arm_distribution}.csv")
     average_results_path = os.path.join(results_dir, f"average_results_{arm_distribution}.csv")
+
+    # Check if the files exist in the parameter directory, otherwise check the default directory
+    if not os.path.exists(results_path) or not os.path.exists(average_results_path):
+        results_dir = os.path.join(base_path, algorithm, 'default')
+        results_path = os.path.join(results_dir, f"results_{arm_distribution}.csv")
+        average_results_path = os.path.join(results_dir, f"average_results_{arm_distribution}.csv")
 
     df_results = pd.read_csv(results_path)
     df_average = pd.read_csv(average_results_path)
 
     return df_results, df_average
 
+
+    # # Combine arm distributions into a string for the file name
+    # if arm_3 == '-':
+    #     arm_distribution = f"{arm_1}_{arm_2}"
+    # else:
+    #     arm_distribution = f"{arm_1}_{arm_2}_{arm_3}"
+
+    # results_dir = get_directory_for_algorithm(algorithm, algorithm_strategy_pairs["params"])
+    
+    # # Load results and average results
+    # results_path = os.path.join(results_dir, f"results_{arm_distribution}.csv")
+    # average_results_path = os.path.join(results_dir, f"average_results_{arm_distribution}.csv")
+
+    # df_results = pd.read_csv(results_path)
+    # df_average = pd.read_csv(average_results_path)
+
+    # return df_results, df_average
+
 # Layout of the Dash App
 # Define the layout of the Dash App
+
+# Layout of the Dash App
 app.layout = html.Div(
     style={'backgroundColor': 'white', 'color': 'black', 'font-family': 'Arial, sans-serif'},
     children=[
@@ -163,12 +288,12 @@ app.layout = html.Div(
                                         html.Div([
                                         # Checkbox for algorithm selection
                                         dcc.Checklist(
-                                            id=f"{algo['value']}_checklist",
+                                            id=f"{algo['value']}_{algo['index']}_checklist",
                                             options=[
-                                                {"label": get_label_with_params(algo["label"], algo["params"]), 
-                                                "value": algo["value"]}
+                                                {"label": get_label_with_params(algo["value"], algo["params"]), 
+                                                "value": f"{algo['value']}_{algo['index']}"}
                                             ],
-                                            value=[algo["value"]],
+                                            value=[f"{algo['value']}_{algo['index']}"],
                                             labelStyle={
                                                 "color": algo["color"],
                                                 'display': 'block',
@@ -181,38 +306,34 @@ app.layout = html.Div(
                                                                 "UCB-V" in algo["value"] or 
                                                                 "EUCBV" in algo["value"] else "0px"
                                             }
-                                        ),
-                                        # Parameter selection popup for algorithms with params
-                                        html.Div(id=f"{algo['value']}_param_popup", style={'margin-left': '20px'})
+                                        )
                                     ]) for algo in algorithm_data
+                                    #     dcc.Checklist(
+                                    #         id=f"{algo['value']}_checklist_{algo['index']}",
+                                    #         options=[
+                                    #             {"label": get_label_with_params(algo["label"], algo["params"]), 
+                                    #             "value": algo["value"]}
+                                    #         ],
+                                    #         value=[algo["value"]],
+                                    #         labelStyle={
+                                    #             "color": algo["color"],
+                                    #             'display': 'block',
+                                    #             "margin-left": "20px" if "ETC" in algo["value"] or 
+                                    #                             "Greedy" in algo["value"] or 
+                                    #                             "UCB" in algo["value"] or 
+                                    #                             "PAC-UCB" in algo["value"] or 
+                                    #                             "UCB-Improved" in algo["value"] or
+                                    #                             "UCB-Tuned" in algo["value"] or 
+                                    #                             "UCB-V" in algo["value"] or 
+                                    #                             "EUCBV" in algo["value"] else "0px"
+                                    #         }
+                                    #     ),
+                                    #     # Parameter selection popup for algorithms with params
+                                    #     html.Div(id=f"{algo['value']}_param_popup_{algo['index']}", style={'margin-left': '20px'})
+                                    # ]) for algo in algorithm_data
                                 ]
                                 )
                                 ],
-                                #         html.Div([
-                                #             dcc.Checklist(
-                                #                 id=f"{algo['value']}_checklist",
-                                #                 options=[
-                                #                     {"label": algo["label"], "value": algo["value"]}
-                                #                 ],
-                                #                 value=[algo["value"]],
-                                #                 labelStyle={
-                                #                     "color": algo["color"],
-                                #                     'display': 'block',
-                                #                     "margin-left": "20px" if "ETC" in algo["value"] or 
-                                #                                     "Greedy" in algo["value"] or 
-                                #                                     "UCB" in algo["value"] or 
-                                #                                     #"UCB-Normal" in algo["value"] or 
-                                #                                     "PAC-UCB" in algo["value"] or 
-                                #                                     "UCB-Improved" in algo["value"] or
-                                #                                     "UCB-Tuned" in algo["value"] or 
-                                #                                     "UCB-V" in algo["value"] or 
-                                #                                     "EUCBV" in algo["value"] else "0px"
-                                #                 }
-                                #             )
-                                #         ]) for algo in algorithm_data
-                                #     ]
-                                #     )
-                                # ],
                                 # Dropdown for selecting first arm distribution
                                 html.Label('Arm 1 Distribution', style={'margin-top': '10px'}),
                                 dcc.Dropdown(
@@ -245,34 +366,6 @@ app.layout = html.Div(
                                     value='-',  # default optional value
                                     style={'margin-bottom': '10px'}
                                 ),
-                                # # Dropdown for selecting arm distribution
-                                # html.Label('Distribution of Arms', style={'margin-top': '10px'}),
-                                # dcc.Dropdown(
-                                #     id='arm_distribution',
-                                #     options=[
-                                #         {'label': '[0.9, 0.8, 0.7]', 'value': '900_800_700'},
-                                #         {'label': '[0.9, 0.85, 0.8]', 'value': '900_850_800'},
-                                #         {'label': '[0.9, 0.8]', 'value': '900_800'},
-
-                                #     ],
-                                #     placeholder='Select...',  
-                                #     clearable=False,
-                                #     value='900_800_700',
-                                #     style={'margin-bottom': '10px'}
-                                # ),
-                                # Dropdown for selecting order of arms
-                                # html.Label('Order of Arms', style={'margin-top': '10px'}),
-                                # dcc.Dropdown(
-                                #     id='first_move',
-                                #     options=[
-                                #         {'label': '(optimal arm, suboptimal arm)', 'value': 'opt'},
-                                #         {'label': '(suboptimal arm, optimal arm)', 'value': 'subopt'}
-                                #     ],
-                                #     placeholder='Select...',  
-                                #     clearable=False,
-                                #     value='opt',
-                                #     style={'margin-bottom': '10px'}
-                                #),
                                 # Dropdown for selecting alpha value
                                 html.Label('Alpha for Fig. 5', style={'margin-top': '10px'}),
                                 dcc.Dropdown(
@@ -289,12 +382,20 @@ app.layout = html.Div(
                                 ),
                                 # Dropdown for selecting algorithm for Fig. 4
                                 html.Label('Algorithm for Fig. 4', style={'margin-top': '10px'}),
+                                # dcc.Dropdown(
+                                #     id='selected_algorithm',
+                                #     options=[{'label': algo['label'], 'value': algo['value']} for algo in algorithm_data],  
+                                #     placeholder='Select...',
+                                #     clearable=False,
+                                #     value='3_UCB',
+                                #     style={'margin-bottom': '10px'}
+                                # ),
                                 dcc.Dropdown(
                                     id='selected_algorithm',
-                                    options=[{'label': algo['label'], 'value': algo['value']} for algo in algorithm_data],  
+                                    options=[{'label': get_label_with_params(algo["value"], algo["params"]), 'value': f"{algo['value']}_{algo['index']}"} for algo in algorithm_data],  
                                     placeholder='Select...',
                                     clearable=False,
-                                    value='3_UCB',
+                                    value='ETC_0',
                                     style={'margin-bottom': '10px'}
                                 ),
                             ]
@@ -319,9 +420,203 @@ app.layout = html.Div(
                     ]
                 )
             ]
-        )
+        ),
+        # Placeholder for dynamically generated components
+        html.Div(id='dynamic-content')
     ]
 )
+
+# app.layout = html.Div(
+#     style={'backgroundColor': 'white', 'color': 'black', 'font-family': 'Arial, sans-serif'},
+#     children=[
+#         # Header section
+#         html.Div(
+#             style={'textAlign': 'center', 'padding': '20px'},
+#             children=[
+#                 html.H1("Simulation of Variance-aware Algorithms for Stochastic Bandit Problems")
+#             ]
+#         ),
+#         # Main content section
+#         html.Div(
+#             style={'display': 'flex'},
+#             children=[
+#                 # Settings panel
+#                 html.Div(
+#                     style={'flex': '1', 'padding': '20px', 'backgroundColor': '#f0f0f0'},
+#                     children=[
+#                         html.H2("Settings"),
+#                         html.Div(
+#                             style={'flex': '1', 'backgroundColor': '#f0f0f0'},
+#                             children=[
+#                                 # Checklist for selecting algorithms
+#                                 *[
+#                                     html.Div(
+#                                     style={'margin-bottom': '20px'},
+#                                     children=[
+#                                         html.Div([
+#                                         # Checkbox for algorithm selection
+#                                         dcc.Checklist(
+#                                             id=f"{algo['value']}_checklist_{algo['index']}",
+#                                             options=[
+#                                                 {"label": get_label_with_params(algo["label"], algo["params"]), 
+#                                                 "value": algo["value"]}
+#                                             ],
+#                                             value=[algo["value"]],
+#                                             labelStyle={
+#                                                 "color": algo["color"],
+#                                                 'display': 'block',
+#                                                 "margin-left": "20px" if "ETC" in algo["value"] or 
+#                                                                 "Greedy" in algo["value"] or 
+#                                                                 "UCB" in algo["value"] or 
+#                                                                 "PAC-UCB" in algo["value"] or 
+#                                                                 "UCB-Improved" in algo["value"] or
+#                                                                 "UCB-Tuned" in algo["value"] or 
+#                                                                 "UCB-V" in algo["value"] or 
+#                                                                 "EUCBV" in algo["value"] else "0px"
+#                                             }
+#                                         ),
+#                                         # Parameter selection popup for algorithms with params
+#                                         html.Div(id=f"{algo['value']}_param_popup_{algo['index']}", style={'margin-left': '20px'})
+#                                     ]) for algo in algorithm_data
+#                                 ]
+#                                 )
+#                                 ],
+#                                 #         html.Div([
+#                                 #             dcc.Checklist(
+#                                 #                 id=f"{algo['value']}_checklist",
+#                                 #                 options=[
+#                                 #                     {"label": algo["label"], "value": algo["value"]}
+#                                 #                 ],
+#                                 #                 value=[algo["value"]],
+#                                 #                 labelStyle={
+#                                 #                     "color": algo["color"],
+#                                 #                     'display': 'block',
+#                                 #                     "margin-left": "20px" if "ETC" in algo["value"] or 
+#                                 #                                     "Greedy" in algo["value"] or 
+#                                 #                                     "UCB" in algo["value"] or 
+#                                 #                                     #"UCB-Normal" in algo["value"] or 
+#                                 #                                     "PAC-UCB" in algo["value"] or 
+#                                 #                                     "UCB-Improved" in algo["value"] or
+#                                 #                                     "UCB-Tuned" in algo["value"] or 
+#                                 #                                     "UCB-V" in algo["value"] or 
+#                                 #                                     "EUCBV" in algo["value"] else "0px"
+#                                 #                 }
+#                                 #             )
+#                                 #         ]) for algo in algorithm_data
+#                                 #     ]
+#                                 #     )
+#                                 # ],
+#                                 # Dropdown for selecting first arm distribution
+#                                 html.Label('Arm 1 Distribution', style={'margin-top': '10px'}),
+#                                 dcc.Dropdown(
+#                                     id='arm_1_distribution',
+#                                     options=[{'label': f'{value}', 'value': f'{int(value * 1000)}'} for value in individual_arm_distribution],
+#                                     placeholder='Select Arm 1...',
+#                                     clearable=False,
+#                                     value='900',  # default value
+#                                     style={'margin-bottom': '10px'}
+#                                 ),
+
+#                                 # Dropdown for selecting second arm distribution
+#                                 html.Label('Arm 2 Distribution', style={'margin-top': '10px'}),
+#                                 dcc.Dropdown(
+#                                     id='arm_2_distribution',
+#                                     options=[{'label': f'{value}', 'value': f'{int(value * 1000)}'} for value in individual_arm_distribution],
+#                                     placeholder='Select Arm 2...',
+#                                     clearable=False,
+#                                     value='895',  # default value
+#                                     style={'margin-bottom': '10px'}
+#                                 ),
+
+#                                 # Dropdown for selecting third arm distribution (optional)
+#                                 html.Label('Arm 3 Distribution (Optional)', style={'margin-top': '10px'}),
+#                                 dcc.Dropdown(
+#                                     id='arm_3_distribution',
+#                                     options=[{'label': f'{value}', 'value': f'{int(value * 1000)}'} for value in individual_arm_distribution] + [{'label': '-', 'value': '-'}],
+#                                     placeholder='Select Arm 3 (Optional)...',
+#                                     clearable=True,
+#                                     value='-',  # default optional value
+#                                     style={'margin-bottom': '10px'}
+#                                 ),
+#                                 # # Dropdown for selecting arm distribution
+#                                 # html.Label('Distribution of Arms', style={'margin-top': '10px'}),
+#                                 # dcc.Dropdown(
+#                                 #     id='arm_distribution',
+#                                 #     options=[
+#                                 #         {'label': '[0.9, 0.8, 0.7]', 'value': '900_800_700'},
+#                                 #         {'label': '[0.9, 0.85, 0.8]', 'value': '900_850_800'},
+#                                 #         {'label': '[0.9, 0.8]', 'value': '900_800'},
+
+#                                 #     ],
+#                                 #     placeholder='Select...',  
+#                                 #     clearable=False,
+#                                 #     value='900_800_700',
+#                                 #     style={'margin-bottom': '10px'}
+#                                 # ),
+#                                 # Dropdown for selecting order of arms
+#                                 # html.Label('Order of Arms', style={'margin-top': '10px'}),
+#                                 # dcc.Dropdown(
+#                                 #     id='first_move',
+#                                 #     options=[
+#                                 #         {'label': '(optimal arm, suboptimal arm)', 'value': 'opt'},
+#                                 #         {'label': '(suboptimal arm, optimal arm)', 'value': 'subopt'}
+#                                 #     ],
+#                                 #     placeholder='Select...',  
+#                                 #     clearable=False,
+#                                 #     value='opt',
+#                                 #     style={'margin-bottom': '10px'}
+#                                 #),
+#                                 # Dropdown for selecting alpha value
+#                                 html.Label('Alpha for Fig. 5', style={'margin-top': '10px'}),
+#                                 dcc.Dropdown(
+#                                     id='alpha',
+#                                     options=[
+#                                         {'label': '0.01', 'value': '0.01'},
+#                                         {'label': '0.05', 'value': '0.05'},
+#                                         {'label': '0.1', 'value': '0.1'}
+#                                     ],
+#                                     placeholder='Select...',  
+#                                     clearable=False,
+#                                     value='0.05',
+#                                     style={'margin-bottom': '10px'}
+#                                 ),
+#                                 # Dropdown for selecting algorithm for Fig. 4
+#                                 html.Label('Algorithm for Fig. 4', style={'margin-top': '10px'}),
+#                                 dcc.Dropdown(
+#                                     id='selected_algorithm',
+#                                     options=[{'label': algo['label'], 'value': algo['value']} for algo in algorithm_data],  
+#                                     placeholder='Select...',
+#                                     clearable=False,
+#                                     value='3_UCB',
+#                                     style={'margin-bottom': '10px'}
+#                                 ),
+#                             ]
+#                         ),
+#                     ]
+#                 ),
+#                 # Plots panel
+#                 html.Div(
+#                     style={'flex': '4', 'padding': '20px'},
+#                     children=[
+#                         html.Div(
+#                             style={'display': 'flex', 'flexWrap': 'wrap'},
+#                             children=[
+#                                 html.Div(style={'flex': '1 1 30%', 'padding': '10px'}, children=[dcc.Graph(id='plot1')]),
+#                                 html.Div(style={'flex': '1 1 30%', 'padding': '10px'}, children=[dcc.Graph(id='plot2')]),
+#                                 html.Div(style={'flex': '1 1 30%', 'padding': '10px'}, children=[dcc.Graph(id='plot3')]),
+#                                 html.Div(style={'flex': '1 1 30%', 'padding': '10px'}, children=[dcc.Graph(id='plot4')]),
+#                                 html.Div(style={'flex': '1 1 30%', 'padding': '10px'}, children=[dcc.Graph(id='plot5')]),
+#                                 html.Div(style={'flex': '1 1 30%', 'padding': '10px'}, children=[dcc.Graph(id='plot6')])
+#                             ]
+#                         )
+#                     ]
+#                 )
+#             ]
+#         ),
+#         # Placeholder for dynamically generated components
+#         html.Div(id='dynamic-content')
+#     ]
+# )
 
 # Callback for updating the plots
 @app.callback(
@@ -330,49 +625,24 @@ app.layout = html.Div(
      Output('plot3', 'figure'),
      Output('plot4', 'figure'),
      Output('plot5', 'figure'),
-     Output('plot6', 'figure'),
-     Output(f"{algo['value']}_param_popup", "children")],
-    [Input(f"{algo['value']}_checklist", 'value') for algo in algorithm_data] +
+     Output('plot6', 'figure')], # +
+    #[Output(generate_param_popup_id(algo['value'], param, algo['index']), "children") for algo in algorithm_data for param in algo["params"]],
+    [Input(f"{algo['value']}_{algo['index']}_checklist", 'value') for algo in algorithm_data] +
     [Input('selected_algorithm', 'value'),
-     #Input('arm_distribution', 'value'),
-     #Input('first_move', 'value'),
      Input('alpha', 'value'),
-     Input('algorithm_dropdown', 'value'),
-    Input('arm_1_distribution', 'value'),
-    Input('arm_2_distribution', 'value'),
-    Input('arm_3_distribution', 'value'),
-    Input(f"{algo['value']}_checklist", "value")]
+     Input('arm_1_distribution', 'value'),
+     Input('arm_2_distribution', 'value'),
+     Input('arm_3_distribution', 'value')]
 )
-def show_params(selected_algorithms):
-    algo_params_divs = []
-    
-    for algo in algorithm_data:
-        algo_name = algo["value"]
-        params = algo["params"]
-        if algo_name in selected_algorithms and params:  # Only show popup if algorithm is selected and has params
-            # Generate a dropdown for each param
-            param_selectors = []
-            for param, default_value in params.items():
-                param_selectors.append(
-                    html.Div([
-                        html.Label(f"Select {param} for {algo_name}"),
-                        dcc.Dropdown(
-                            id=f"{algo_name}_{param}_dropdown",
-                            options=[{"label": str(default_value), "value": default_value}],
-                            value=default_value,
-                        )
-                    ])
-                )
-            algo_params_divs.append(html.Div(param_selectors))
 
-    return algo_params_divs
 
-def update_output(algorithm, arm_1, arm_2, arm_3):
-    # Call the load_data function with the selected dropdown values
-    df_results, df_average = load_data(algorithm, arm_1, arm_2, arm_3)
+
+# def update_output(algorithm, arm_1, arm_2, arm_3):
+#     # Call the load_data function with the selected dropdown values
+#     df_results, df_average = load_data(algorithm, arm_1, arm_2, arm_3)
     
-    # Process and return data as needed (e.g., render tables, graphs, etc.)
-    return f"Loaded data for algorithm: {algorithm}, arm distributions: {arm_1}, {arm_2}, {arm_3}"
+#     # Process and return data as needed (e.g., render tables, graphs, etc.)
+#     return f"Loaded data for algorithm: {algorithm}, arm distributions: {arm_1}, {arm_2}, {arm_3}"
 
 
 def update_plots(*args):
@@ -398,12 +668,10 @@ def update_plots(*args):
     # Extract the selected algorithms and parameters from the arguments
     selected_algorithms = [algo for algo_values in args[:len(algorithm_data)] for algo in algo_values]
     selected_algorithm = args[len(algorithm_data)]
-    #arm_distribution = args[len(algorithm_data) + 1]
-    #first_move = args[len(algorithm_data) + 2]
-    selected_alpha = args[len(algorithm_data) + 2]
-    arm_1 = args[len(algorithm_data) + 3] ??
-    arm_2 = args[len(algorithm_data) + 4]
-    arm_3 = args[len(algorithm_data) + 5]
+    selected_alpha = args[len(algorithm_data) + 1]
+    arm_1 = args[len(algorithm_data) + 2]
+    arm_2 = args[len(algorithm_data) + 3]
+    arm_3 = args[len(algorithm_data) + 4]
 
     # Initialize empty figures
     fig1, fig2, fig3, fig4, fig5, fig6 = [go.Figure() for _ in range(6)]
@@ -418,7 +686,7 @@ def update_plots(*args):
     fig1 = go.Figure()
     for algo in selected_algorithms:
         df = data[algo][1]
-        algo_data = next((a for a in algorithm_data if a["value"] == algo), None)
+        algo_data = next((a for a in algorithm_data if a["value"] == algo.split('_')[0]), None)
         if algo_data:
             fig1.add_trace(go.Scatter(
                 x=df['Timestep'],
@@ -441,7 +709,7 @@ def update_plots(*args):
     fig2 = go.Figure()
     for algo in selected_algorithms:
         df = data[algo][1]
-        algo_data = next((a for a in algorithm_data if a["value"] == algo), None)
+        algo_data = next((a for a in algorithm_data if a["value"] == algo.split('_')[0]), None)
         if algo_data:
             fig2.add_trace(go.Scatter(
                 x=df['Timestep'],
@@ -485,7 +753,7 @@ def update_plots(*args):
         algo_labels.append(algo)
 
         # Extract the color of the algorithm
-        algo_data = next((a for a in algorithm_data if a["value"] == algo), None)
+        algo_data = next((a for a in algorithm_data if a["value"] == algo.split('_')[0]), None)
         if algo_data:
             colors_zeros.append(algo_data["color"])
             colors_ones.append(algo_data["color"])
@@ -527,7 +795,7 @@ def update_plots(*args):
     selected_data = data[selected_algorithm][0]
     df_100k = selected_data[selected_data['Timestep'] == 100000]
     # Find the color for the selected algorithm
-    selected_algo_info = next((algo for algo in algorithm_data if algo['value'] == selected_algorithm), None)
+    selected_algo_info = next((algo for algo in algorithm_data if algo['value'] == selected_algorithm.split('_')[0]), None)
     if selected_algo_info:
         selected_color = selected_algo_info['color']
     else:
@@ -546,12 +814,21 @@ def update_plots(*args):
 
     # Plot 5: Value at Risk Function
     alpha_value = float(selected_alpha)
+    # Correctly format the arm distribution string for the VaR file
+    if arm_3 == '-' or arm_3 is None:
+        arm_distribution = f"{arm_1}_{arm_2}"
+    else:
+        arm_distribution = f"{arm_1}_{arm_2}_{arm_3}"
+    
     
     fig5 = go.Figure()
     for algo in selected_algorithms:
-        var_file = os.path.join(var_base_path, f"{algo}_VaR_{arm_distribution}_alpha_{alpha_value}.csv")
+        var_file = os.path.join(var_base_path, f"{algo.split('_')[0]}_VaR_{arm_distribution}_alpha_{alpha_value}.csv")
+        if not os.path.exists(var_file):
+            print(f"File not found: {var_file}")
+            continue
         df_var = pd.read_csv(var_file)
-        algo_data = next((a for a in algorithm_data if a["value"] == algo), None)
+        algo_data = next((a for a in algorithm_data if a["value"] == algo.split('_')[0]), None)
         if algo_data:
             fig5.add_trace(go.Scatter(
                 x=df_var['Timestep'],
@@ -575,7 +852,7 @@ def update_plots(*args):
     fig6 = go.Figure()
     for algo in selected_algorithms:
         df = data[algo][1]
-        algo_data = next((a for a in algorithm_data if a["value"] == algo), None)
+        algo_data = next((a for a in algorithm_data if a["value"] == algo.split('_')[0]), None)
         if algo_data:
             fig6.add_trace(go.Scatter(
                 x=df['Timestep'],
