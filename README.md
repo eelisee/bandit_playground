@@ -1,42 +1,48 @@
 # Variance-aware Algorithms for Stochastic Bandit Problems
 
+This repository contains the implementation of various multi-armed bandit algorithms and a dashboard for visualizing their performance. The goal is to compare the effectiveness of different algorithms in maximizing rewards and minimizing regret over time.
 
-einfügen: Projektbeschreibung, anleitung zur Installation, bspw:
+## Algorithms and Tuning Parameters
 
-git clone https://github.com/dein-repo/stochastic-bandits-dashboard.git
-cd stochastic-bandits-dashboard
-pip install -r requirements.txt
-python src/dashboard.py
-
-kurze einführung in Algorithmen, parameteränderung
-
-
-Exploration-Exploitation Trade-Off of Bandit Algorithms in Comparison
-
-This repository contains the implementation of various multi-armed bandit algorithms and a dashboard for visualizing their performance. The goal is to compare the effectiveness of different algorithms in maximizing rewards and minimizing regret over time. Below is a brief overview of each algorithm's functionality:
+The following algorithms are implemented, each with its own set of tuning parameters:
 
 - **ETC (Explore-then-Commit)**: Explores all available arms for a certain number of rounds before committing to the arm with the highest estimated reward.
+  - Tuning Parameters: None
+
 - **Epsilon-Greedy**: Balances exploration and exploitation by choosing a random action with probability epsilon and the action with the highest estimated reward with probability \(1 - \epsilon\).
+  - Tuning Parameters: `epsilon`
+
 - **UCB (Upper Confidence Bound)**: Selects the arm with the highest upper confidence bound to balance exploration and exploitation.
+  - Tuning Parameters: None
+
 - **UCB-Normal**: A variant of UCB designed for normally distributed rewards.
+  - Tuning Parameters: None
+
 - **UCB-Tuned**: Adjusts the confidence bound by considering the variance of the rewards.
+  - Tuning Parameters: None
+
 - **UCB-V**: Incorporates variance estimates into the upper confidence bounds.
+  - Tuning Parameters: None
+
 - **PAC-UCB**: Guarantees with high probability that the regret is close to the optimal policy.
+  - Tuning Parameters: None
+
 - **UCB-Improved**: Enhances UCB with more sophisticated exploration strategies.
+  - Tuning Parameters: None
+
 - **EUCBV (Efficient-UCB with Variance)**: Uses empirical estimates of variance to adjust the upper confidence bounds.
+  - Tuning Parameters: `rho`
+
 - **Not Variance Aware**: A combined result of algorithms that do not consider variance.
+  - Tuning Parameters: None
+
 - **Variance Aware**: A combined result of algorithms that consider variance.
+  - Tuning Parameters: None
 
 
 ## Bandit Model
 
-The bandit model used in this repository focuses on a 2-armed bandit problem with Bernoulli-distributed arms for most algorithms and Gaussian-distributed arms for the UCB-Normal algorithm. The arms are set with three different reward scenarios:
-
-1. [0.9, 0.8]
-2. [0.9, 0.895]
-3. [0.5, 0.495]
-
-For the UCB-Normal algorithm, the corresponding variances are adjusted to match the Bernoulli settings.
+The bandit model used in this repository focuses on a multi-armed bandit problem with Bernoulli-distributed arms. The arms are set with the reward probabilities for each arm of $[0.8, 0.89, 0.895, 0.9]$ and can be chosen for two- or three-armed scenarios as well as all possible permutations
 
 Each algorithm is run for 100 rounds, and the results are stored in separate directories for different time steps. Additionally, there is a 'results_average' file for each algorithm, providing the average values for each time step based on 100 samples.
 
@@ -47,54 +53,60 @@ Visualizations and dashboards were created using Plotly and Dash. There is a das
 1. **Average Total Reward Over Time**: Displays how effectively each algorithm maximizes rewards over time.
 2. **Average Regret Over Time**: Shows how well each algorithm minimizes regret over time.
 3. **Reward Distribution**: A boxplot showing the distribution of zero and one rewards for each algorithm.
-4. **Distribution of Total Regret at Timestep 100,000**: A histogram of total regret values at timestep 100,000 across 100 iterations for a selected algorithm.
+4. **Distribution of Total Regret at Timestep 100,000**: A histogram of total regret values at timestep 1,000,000 across 100 iterations for a selected algorithm.
 5. **Value-at-Risk (VaR) Function**: Displays the VaR function for alpha values 0.01, 0.05, and 0.1, indicating the maximum potential loss at a given confidence level.
 6. **Proportion of Suboptimal Arms Pulled**: Shows the proportion of suboptimal arm selections compared to all selections up to each timestep.
 
 ## Setup Instructions
 
-1. **Clone the Repository**
+## 1. Clone the Repository
 
-   ```bash
-   git clone https://github.com/eelisee/varianceinucbalgorithms.git
-   cd varianceinucbalgorithms
-   
-2. **Install Dependencies**
+First, you need to clone the repository from GitHub to your local machine. Open your terminal (or command prompt) and run the following command:
 
-   Ensure you have Python installed. Then, install the required packages using pip:
-   ```bash
-   pip install -r requirements.txt
+```bash
+git clone https://github.com/eelisee/bandit_playground.git
+cd bandit_playground
+```
 
-4. **Run Algorithms**
-   
-   Navigate to the 1_algorithms_code directory and run the algorithms to generate results:
+## 2. Set Up a Virtual Environment
 
-   ```bash
-   python 1_ETC.py
-   python 2_Greedy.py
-   ...
-   python 9_EUCBV.py
+It is strongly recommended to use a virtual environment to manage the project's dependencies. You can create and activate a virtual environment by running the following commands:
 
-5. You can also calculate the average results and VaR values:
+__For macOS/Linux:__
 
-   ```bash
-   python calculate_average.py
-   python calculate_var.py
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
 
-6. **Run the Dashboard**
+__For Windows:__
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
 
-   Navigate to the 3_dashboard directory and start the dashboard:
-   
-   ```bash
-   python dashboard.py
+## 3. Install Dependencies
 
-Open your browser and go to http://127.0.0.1:8050 to view the dashboard.
-   
-For further details on the algorithms, simulation setup, and visualizations, please refer to the corresponding sections in the associated thesis in 0_general.
+Once the virtual environment is activated, you need to install the required Python packages. Install them by running the following command:
 
+```bash
+pip install -r requirements.txt
+```
 
+This command will install all the dependencies listed in the ```requirements.txt``` file. Ensure that all packages install without errors.
 
+## 4. Running the Dashboard
 
+Once the installation is complete, you can start the dashboard by running the following command:
 
+```bash
+python src/dashboard.py
+```
 
+After the command runs, your default web browser should automatically open with the dashboard at this URL:
 
+```bash
+http://127.0.0.1:8050
+```
+
+If it doesn't open automatically, you can manually copy and paste this URL into your browser.
