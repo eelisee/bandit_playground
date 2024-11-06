@@ -93,7 +93,7 @@ def get_directory_for_algorithm(algorithm, params):
 
     # Dynamically generate parameter directory by iterating over params
     if params:
-        param_dir = '_'.join([f'{key}_{str(value).replace('.', '_')}' for key, value in params.items()])
+        param_dir = '_'.join(['{}_{}'.format(key, str(value).replace('.', '_')) for key, value in params.items()])
     else:
         param_dir = 'default'
     
