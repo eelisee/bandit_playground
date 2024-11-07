@@ -16,6 +16,8 @@ git clone https://github.com/eelisee/bandit_playground.git
 cd bandit_playground
 ```
 
+In case you
+
 ## 3. Set Up a Virtual Environment
 
 It is strongly recommended to use a virtual environment to manage the project's dependencies. You can create and activate a virtual environment by running the following commands:
@@ -99,10 +101,10 @@ Then, open ```http://127.0.0.1:8060``` in your browser.
 If you encounter errors about missing dependencies, ensure that you have installed all required packages:
 
 Run ```pip install -r requirements.txt``` again to ensure all dependencies are installed.
-If the error persists, check if you are using the correct Python version (3.9 or 3.11.5).
+If the error persists, check if you are using the correct Python version (3.9 or 3.11.5). It is important that you have created an virtual environment beforehand, since otherwise there might occure conflicts within global dependencies.
 
 ### 8.3 Virtual Environment Not Activated
-If running python src/dashboard.py opens a different Python version or doesn’t work as expected, it might mean the virtual environment is not activated. Make sure to activate it:
+If running ```python src/dashboard.py``` opens a different Python version or doesn’t work as expected, it might mean the virtual environment is not activated. Make sure to activate it:
 
 __For macOS/Linux:__
 

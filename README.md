@@ -18,11 +18,11 @@ The following algorithms are implemented, each with its own set of tuning parame
 - **Epsilon-Greedy**: Balances exploration and exploitation by choosing a random action with probability epsilon and the action with the highest estimated reward with probability \(1 - \epsilon\).
    - Tuning Parameters: `epsilon`
    - Scenarios:
-      - `epsilon`: 0.05
       - `epsilon`: 0.5
       - `epsilon`: 0.1
-      - `epsilon`: 0.005
       - `epsilon`: 0.01
+      - `epsilon`: 0.05
+      - `epsilon`: 0.005
 
 - **UCB (Upper Confidence Bound)**: Selects the arm with the highest upper confidence bound to balance exploration and exploitation.
    - Tuning Parameters: None
