@@ -34,6 +34,9 @@ algorithm_data = [
     {"label": "EUCBV", "value": "EUCBV", "color": "#800000", "line_style": "dash"}
 ]
 
+# Create a mapping of algorithm names with their corresponding IDs
+algorithm_id_mapping = {f"{algo.name}_{index}": (algo, config) for index, (algo, config) in enumerate(algorithm_strategy_pairs)}
+
 # Helper function to find color and line style
 def find_algorithm_style(algo_name):
     for algo in algorithm_data:
@@ -56,7 +59,8 @@ def get_algorithm_data():
             "color": color,
             "line_style": line_style,
             "params": params,  # Store params for later use
-            "index": index  # Add index to ensure unique IDs
+            "index": index,  # Add index to ensure unique IDs
+            "id": f"{algo_name}_{index}"  # Add ID for unique identification
         })
     return algo_data
 
@@ -196,6 +200,8 @@ def load_data(algorithm_with_index, arm_1, arm_2, arm_3):
         - df_results: DataFrame containing the results data.
         - df_average: DataFrame containing the average results data.
     """
+
+    algorithm_id = algorithm_with_index
     
     # Extract the actual algorithm name from the combined string
     algorithm = algorithm_with_index.split('_')[0]
@@ -207,7 +213,8 @@ def load_data(algorithm_with_index, arm_1, arm_2, arm_3):
         arm_distribution = f"{arm_1}_{arm_2}_{arm_3}"
 
     # Find the corresponding algorithm configuration
-    algo_config = next((config for algo, config in algorithm_strategy_pairs if algo.name == algorithm), None)
+    algo, algo_config = algorithm_id_mapping.get(algorithm_id, (None, None))
+    #algo_config = next((config for algo, config in algorithm_strategy_pairs if algo.name == algorithm), None)
     if not algo_config:
         raise ValueError(f"No configuration found for algorithm: {algorithm}")
 
@@ -792,6 +799,7 @@ def update_plots(*args):
     )
 
     # Plot 4: Distribution of Total Regret at Timestep 100000
+    # Extract the actual algorithm name from the combined string
     selected_data = data[selected_algorithm][0]
     df_100k = selected_data[selected_data['Timestep'] == 100000]
     # Find the color for the selected algorithm
