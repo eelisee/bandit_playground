@@ -8,7 +8,7 @@ from concurrent.futures import ProcessPoolExecutor
 
 from utils.bandit_algorithm import BanditAlgorithm
 from utils.simulation_utils import general_simulation
-from utils.combination import generate_combinations
+from utils.combination_copy import generate_combinations
 #from calculations_for_dashboard.value_at_risk import run_value_at_risk
 #from calculations_for_dashboard.calculate_averages import run_average_calculations
 #from calculations_for_dashboard.calculate_averages import main as calculate_averages_main
