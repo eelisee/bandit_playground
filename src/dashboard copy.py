@@ -399,10 +399,10 @@ app.layout = html.Div(
                                 # ),
                                 dcc.Dropdown(
                                     id='selected_algorithm',
-                                    options=[], #{'label': get_label_with_params(algo["value"], algo["params"]), 'value': f"{algo['value']}_{algo['index']}"} for algo in algorithm_data],  
+                                    options=[{'label': get_label_with_params(algo["value"], algo["params"]), 'value': f"{algo['value']}_{algo['index']}"} for algo in algorithm_data],  
                                     placeholder='Select...',
                                     clearable=False,
-                                    value='None',
+                                    value='ETC_0',
                                     style={'margin-bottom': '10px'}
                                 ),
                             ]
@@ -625,20 +625,6 @@ app.layout = html.Div(
 #     ]
 # )
 
-
-@app.callback(
-    Output('selected_algorithm', 'options'),
-    [Input(f"{algo['value']}_{algo['index']}_checklist", 'value') for algo in algorithm_data]
-)
-def update_dropdown_options(*selected_algorithms):
-    # Flatten the list of selected algorithms
-    selected_algorithms = [algo for algo_values in selected_algorithms for algo in algo_values]
-    
-    # Generate the new options for the dropdown
-    new_options = [{'label': get_label_with_params(algo["value"], algo["params"]), 'value': f"{algo['value']}_{algo['index']}"} for algo in algorithm_data if f"{algo['value']}_{algo['index']}" in selected_algorithms]
-    
-    return new_options
-
 # Callback for updating the plots
 @app.callback(
     [Output('plot1', 'figure'),
@@ -814,56 +800,25 @@ def update_plots(*args):
 
     # Plot 4: Distribution of Total Regret at Timestep 100000
     # Extract the actual algorithm name from the combined string
-    # selected_data = data[selected_algorithm][0]
-    # df_100k = selected_data[selected_data['Timestep'] == 100000]
-    # # Find the color for the selected algorithm
-    # selected_algo_info = next((algo for algo in algorithm_data if algo['value'] == selected_algorithm.split('_')[0]), None)
-    # if selected_algo_info:
-    #     selected_color = selected_algo_info['color']
-    # else:
-    #     selected_color = 'black'
-    
-    # fig4 = go.Figure(go.Histogram(x=df_100k['Total Regret'], marker_color=selected_color))
-    # fig4.update_layout(
-    #     title=f'Fig. 4: Distribution of Total Regret at t=100 000 for {selected_algorithm}',
-    #     xaxis_title="Total Regret",
-    #     yaxis_title="Count",
-    #     paper_bgcolor='white',
-    #     plot_bgcolor='white',
-    #     font={'color': 'black', "size": 8},
-    #     showlegend=False
-    # )
-
-    if selected_algorithm in selected_algorithms:
-        selected_data = data[selected_algorithm][0]
-        df_100k = selected_data[selected_data['Timestep'] == 100000]
-        # Find the color for the selected algorithm
-        selected_algo_info = next((algo for algo in algorithm_data if algo['value'] == selected_algorithm.split('_')[0]), None)
-        if selected_algo_info:
-            selected_color = selected_algo_info['color']
-        else:
-            selected_color = 'black'
-        
-        fig4 = go.Figure(go.Histogram(x=df_100k['Total Regret'], marker_color=selected_color))
-        fig4.update_layout(
-            title=f'Fig. 4: Distribution of Total Regret at t=100 000 for {selected_algorithm}',
-            xaxis_title="Total Regret",
-            yaxis_title="Count",
-            paper_bgcolor='white',
-            plot_bgcolor='white',
-            font={'color': 'black', "size": 8},
-            showlegend=False
-        )
+    selected_data = data[selected_algorithm][0]
+    df_100k = selected_data[selected_data['Timestep'] == 100000]
+    # Find the color for the selected algorithm
+    selected_algo_info = next((algo for algo in algorithm_data if algo['value'] == selected_algorithm.split('_')[0]), None)
+    if selected_algo_info:
+        selected_color = selected_algo_info['color']
     else:
-        fig4 = go.Figure()
-        fig4.update_layout(
-            title='Fig. 4: No data available',
-            paper_bgcolor='white',
-            plot_bgcolor='white',
-            font={'color': 'black', "size": 8},
-            showlegend=False
-        )
-
+        selected_color = 'black'
+    
+    fig4 = go.Figure(go.Histogram(x=df_100k['Total Regret'], marker_color=selected_color))
+    fig4.update_layout(
+        title=f'Fig. 4: Distribution of Total Regret at t=100 000 for {selected_algorithm}',
+        xaxis_title="Total Regret",
+        yaxis_title="Count",
+        paper_bgcolor='white',
+        plot_bgcolor='white',
+        font={'color': 'black', "size": 8},
+        showlegend=False
+    )
 
     # Plot 5: Value at Risk Function
     alpha_value = float(selected_alpha)

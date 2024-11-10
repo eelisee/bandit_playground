@@ -13,7 +13,13 @@ def generate_combinations(individual_arm_distribution):
         individual_arm_distribution (list): A list of arm values from which combinations are generated.
     Returns:
         list: A list of tuples where each tuple contains a permutation of arms and its corresponding string representation.
+    Raises:
+        ValueError: If any value in individual_arm_distribution is greater than 1.
     """
+
+    # Check for values greater than 1
+    if any(value > 1 for value in individual_arm_distribution):
+        raise ValueError("All values in individual_arm_distribution must be less than or equal to 1.")
 
     combinations_set = set()  # Using a set to store unique combinations
 
@@ -23,7 +29,7 @@ def generate_combinations(individual_arm_distribution):
     for comb in two_arm_combinations:
         # Generate all permutations (unique order) of two-arm combinations
         for perm in permutations(comb):
-            combination_name = "_".join(str(int(a * 1000) if a < 1 else int(a * 100)) for a in perm)
+            combination_name = "_".join(str(int(a * 1000)) for a in perm)
             combinations_set.add((perm, combination_name))
 
     # 2. Generate three-arm combinations (allow two repeated arms)
