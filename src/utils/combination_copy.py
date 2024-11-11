@@ -1,7 +1,7 @@
 from itertools import permutations, combinations, combinations_with_replacement
 
 # Function to generate the unique arm combinations including equal arm combinations
-def generate_combinations(individual_arm_distribution):
+def generate_combinations_copy(individual_arm_distribution):
     """
     Generate unique combinations of arms from the given distribution, including equal arm combinations.
     This function generates three types of combinations:

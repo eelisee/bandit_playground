@@ -86,14 +86,14 @@ It is strongly recommended to use a virtual environment to manage the project's 
 __For macOS/Linux:__
 
 ```bash
-python3 -m venv venv
-source venv/bin/activate
+python3 -m venv .venv
+source .venv/bin/activate
 ```
 
 __For Windows:__
 ```bash
-python -m venv venv
-venv\Scripts\activate
+python -m venv .venv
+.venv\Scripts\activate
 ```
 
 ## 3. Install Dependencies
