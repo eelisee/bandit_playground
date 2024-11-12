@@ -27,19 +27,10 @@ def generate_combinations_copy(individual_arm_distribution):
     # 1. Generate two-arm combinations (allow repeated arms)
     two_arm_combinations_all = combinations(individual_arm_distribution, 2)
     
-    two_arm_combinations = [(0.8,0.8), (0.85,0.85), (0.89,0.89), (0.895,0.895), (0.9,0.9)]
+    two_arm_combinations = [(0.8,0.8,0.8), (0.85,0.85,0.85), (0.89,0.89,0.89), (0.895,0.895,0.895), (0.9,0.9,0.9)]
     
     for comb in two_arm_combinations:
         # Generate all permutations (unique order) of two-arm combinations
-        for perm in permutations(comb):
-            combination_name = "_".join(str(int(a * 1000)) for a in perm)
-            combinations_set.add((perm, combination_name))
-
-    # 2. Generate three-arm combinations (allow repeated arms)
-    three_arm_combinations = combinations(individual_arm_distribution, 3)
-    
-    for comb in three_arm_combinations:
-        # Generate all permutations (unique order) of three-arm combinations
         for perm in permutations(comb):
             combination_name = "_".join(str(int(a * 1000)) for a in perm)
             combinations_set.add((perm, combination_name))
@@ -57,10 +48,3 @@ def generate_combinations_copy(individual_arm_distribution):
     sorted_combinations = sorted(list(combinations_set), key=lambda x: x[1])
 
     return sorted_combinations
-
-# Example usage
-if __name__ == "__main__":
-    individual_arm_distribution = [0.9, 0.89, 0.895, 0.85, 0.8]
-    combinations = generate_combinations_with_equal_arms(individual_arm_distribution)
-    for comb in combinations:
-        print(comb)
