@@ -107,8 +107,26 @@ def get_directory_for_algorithm(algorithm, params):
 def run_simulation_inner(algorithm, strategy, arm_means, combination_name, time_horizons):
     print(f"Running simulation for {algorithm.name} with arm means {arm_means} and strategy {strategy['strategy_fn'].__name__}")
 
+    # Get the directory for this algorithm and strategy
+    results_dir = get_directory_for_algorithm(algorithm, strategy["params"])
+
+    # Check if the results for this combination already exist
+    detailed_results_path = os.path.join(results_dir, f'results_{combination_name}.csv')
+    if os.path.exists(detailed_results_path):
+        print(f"Results for {algorithm.name} with combination {combination_name} already exist. Skipping simulation.")
+        return
+
     # Run the simulation
     general_simulation(algorithm, arm_means, time_horizons, strategy["strategy_fn"], **strategy["params"])
+
+    # Save detailed results to CSV
+    algorithm.save_results_to_csv(detailed_results_path)
+    print(f"Saved detailed results to {detailed_results_path}")
+
+    # Calculate and save average results to CSV
+    avg_results = algorithm.calculate_average_results()
+    avg_results_path = os.path.join(results_dir, f'average_results_{combination_name}.csv')
+    save_average_results(avg_results, avg_results_path)
 
     # Get the directory for this algorithm and strategy
     results_dir = get_directory_for_algorithm(algorithm, strategy["params"])
