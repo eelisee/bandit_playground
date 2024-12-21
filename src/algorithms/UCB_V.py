@@ -28,7 +28,7 @@ def UCB_V_simulation(arm_means, num_arms, total_steps, **kwargs):
     theta = kwargs.get('theta') 
     c = kwargs.get('c')
     b = kwargs.get('b')
-    variance = kwargs.get('variance') # fixed variance instead of sample variance
+    # variance = kwargs.get('variance') # fixed variance instead of sample variance
 
     # Initialize variables
     num_arms = len(arm_means)
@@ -36,6 +36,7 @@ def UCB_V_simulation(arm_means, num_arms, total_steps, **kwargs):
     counts = np.zeros(num_arms)
     sum_of_squares = np.zeros(num_arms)
     total_reward = 0
+    variance = np.zeros(num_arms)
     suboptimal_arms_count = 0
     total_regret = 0
     zeros_count = 0
@@ -59,14 +60,17 @@ def UCB_V_simulation(arm_means, num_arms, total_steps, **kwargs):
                 if counts[k] > 0:
                     mean_reward = rewards[k] / counts[k]
                     #variance = (sum_of_squares[k] - counts[k] * (mean_reward ** 2)) / counts[k]
-                    
+                    variance = arm_means[k] * (1 - arm_means[k]) # fixed variance instead of sample variance for normal distribution with value as bernoulli
+        
                     exploration = theta * np.log(t)
                     B[k] = mean_reward + np.sqrt((2 * variance * exploration) / counts[k]) + c * (3 * b * exploration / counts[k])
             # Select the arm with the highest UCB-V value
             arm = np.argmax(B)
         
         # Simulate pulling the arm and receiving a reward
-        reward = np.random.binomial(1, arm_means[arm])
+        #reward = np.random.binomial(1, arm_means[arm])
+        variance[arm] = arm_means[arm] * (1 - arm_means[arm])
+        reward = np.random.normal(arm_means[arm], np.sqrt(variance[arm]))
         counts[arm] += 1
         rewards[arm] += reward
         sum_of_squares[arm] += reward ** 2
