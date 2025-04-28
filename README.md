@@ -1,4 +1,4 @@
-# Variance-aware Algorithms for Stochastic Bandit Problems
+# A Reproducible Framework for Fair Evaluation of Variance-Aware Bandit Algorithms
 
 This repository contains the implementation of various multi-armed bandit algorithms and a dashboard for visualizing their performance. The goal is to compare the effectiveness of different algorithms in maximizing rewards and minimizing regret over time.
 
