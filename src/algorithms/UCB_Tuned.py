@@ -1,6 +1,6 @@
 import numpy as np
 
-def UCB_Tuned_simulation(arm_means, num_arms, total_steps):
+def UCB_Tuned_simulation(arm_means, num_arms, total_steps, rng=None):
     """
     Simulates the UCB-Tuned algorithm over given time horizons.
 
@@ -54,7 +54,7 @@ def UCB_Tuned_simulation(arm_means, num_arms, total_steps):
             arm = np.argmax(UCB)
         
         # Simulate pulling the arm
-        reward = np.random.binomial(1, arm_means[arm])
+        reward = rng.binomial(1, arm_means[arm])
         counts[arm] += 1
         rewards[arm] += reward
         sum_of_squares[arm] += reward ** 2

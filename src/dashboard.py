@@ -6,15 +6,12 @@ import plotly.graph_objs as go
 import pandas as pd
 import os
 
-from main_script import individual_arm_distribution, algorithm_strategy_pairs, get_directory_for_algorithm, create_directory, algorithm_groups
+from config import individual_arm_distribution, algorithm_strategy_pairs, algorithm_groups, base_path
+from utils.simulation_utils import get_directory_for_algorithm, create_directory
 
 # Initialise Dash App
 app = dash.Dash(__name__, suppress_callback_exceptions=True)
 app.title = "Simulation of variance-aware algorithms for Stochastic Bandit Problems"
-
-# Basis path
-base_path = os.path.join(os.getcwd(), "data", "algorithms_results")
-var_base_path = os.path.join(os.getcwd(), "data", "algorithms_results", "Value_at_Risk")
 
 # Algorithms, add new algorithms here
 algorithm_data = [
@@ -22,7 +19,6 @@ algorithm_data = [
     {"label": "ETC", "value": "ETC", "color": "#32CD32", "line_style": "solid"},
     {"label": "Greedy", "value": "Greedy", "color": "#9ACD32", "line_style": "solid"},
     {"label": "UCB", "value": "UCB", "color": "#6B8E23", "line_style": "solid"},
-    #{"label": "UCB-Normal", "value": "UCB-Normal", "color": "#808000", "line_style": "solid"},
     
     {"label": "Not-variance-aware UCB Variations", "value": "Not-variance-aware UCB Variations", "color": "#00CED1", "line_style": "dot"},
     {"label": "PAC-UCB", "value": "PAC-UCB", "color": "#00BFFF", "line_style": "dot"},
@@ -127,6 +123,61 @@ def load_data(algorithm_with_index, arm_1, arm_2, arm_3):
     df_average = pd.read_csv(average_results_path)
 
     return df_results, df_average
+
+def load_var_data(algorithm_with_index, arm_1, arm_2, arm_3, selected_alpha):
+    """
+    Loads the Value at Risk (VaR) data for a specific algorithm and arm distribution.
+    
+    Parameters:
+    algorithm_with_index (str): The name of the algorithm with index (e.g., "UCB_0").
+    arm_1 (str): The selected value for the first arm distribution.
+    arm_2 (str): The selected value for the second arm distribution.
+    arm_3 (str): The selected value for the third arm distribution (can be "-").
+    selected_alpha (float): The alpha value for the VaR calculation.
+    
+    Returns:
+    DataFrame: DataFrame containing the Value at Risk data.
+    """
+    
+    algorithm_id = algorithm_with_index
+    
+    # Extract the actual algorithm name from the combined string
+    algorithm = algorithm_with_index.split('_')[0]
+    
+    # Combine arm distributions into a string for the file name
+    if arm_3 == '-' or arm_3 is None:
+        arm_distribution = f"{arm_1}_{arm_2}"
+    else:
+        arm_distribution = f"{arm_1}_{arm_2}_{arm_3}"
+    
+    # Find the corresponding algorithm configuration
+    algo, algo_config = algorithm_id_mapping.get(algorithm_id, (None, None))
+    if not algo_config:
+        raise ValueError(f"No configuration found for algorithm: {algorithm}")
+    
+    # Generate the parameter directory string
+    params = algo_config["params"]
+    if params:
+        param_dir = '_'.join([f'{key}_{str(value).replace(".", "_")}' for key, value in params.items()])
+    else:
+        param_dir = 'default'
+
+    # Construct the results directory path based on the algorithm and parameters
+    results_dir = os.path.join(base_path, algorithm, param_dir)
+    
+    # Construct the path for the ValueAtRisk directory
+    var_dir = os.path.join(results_dir, 'value_at_risk')
+    
+    # Construct the path for the specific Value at Risk CSV file
+    var_file = os.path.join(var_dir, f"VaR_{arm_distribution}_alpha_{selected_alpha}.csv")
+    
+    # Check if the file exists
+    if os.path.exists(var_file):
+        df_var = pd.read_csv(var_file)
+        return df_var
+    else:
+        print(f"File not found: {var_file}")
+        return None
 
 # Layout of the Dash App
 app.layout = html.Div(
@@ -480,23 +531,26 @@ def update_plots(*args):
     else:
         arm_distribution = f"{arm_1}_{arm_2}_{arm_3}"
     
-    
     fig5 = go.Figure()
     for algo in selected_algorithms:
-        var_file = os.path.join(var_base_path, f"{algo.split('_')[0]}_VaR_{arm_distribution}_alpha_{alpha_value}.csv")
-        if not os.path.exists(var_file):
-            print(f"File not found: {var_file}")
-            continue
-        df_var = pd.read_csv(var_file)
-        algo_data = next((a for a in algorithm_data if a["value"] == algo.split('_')[0]), None)
-        if algo_data:
-            fig5.add_trace(go.Scatter(
-                x=df_var['Timestep'],
-                y=df_var['Value_at_Risk'],
-                mode='lines+markers',
-                name=algo,
-                line=dict(color=algo_data["color"], dash=algo_data["line_style"])
-            ))
+        
+        # var_file = os.path.join(var_base_path, f"{algo.split('_')[0]}_VaR_{arm_distribution}_alpha_{alpha_value}.csv")
+        #if not os.path.exists(var_file):
+        #    print(f"File not found: {var_file}")
+        #    continue
+        #df_var = pd.read_csv(var_file)
+        df_var = load_var_data(algo, arm_1, arm_2, arm_3, alpha_value)
+    
+        if df_var is not None:
+            algo_data = next((a for a in algorithm_data if a["value"] == algo.split('_')[0]), None)
+            if algo_data:
+                fig5.add_trace(go.Scatter(
+                    x=df_var['Timestep'],
+                    y=df_var['Value_at_Risk'],
+                    mode='lines+markers',
+                    name=algo,
+                    line=dict(color=algo_data["color"], dash=algo_data["line_style"])
+                ))
     
     fig5.update_layout(
         title=f'Fig. 5: Value at Risk for selected alpha={selected_alpha}',

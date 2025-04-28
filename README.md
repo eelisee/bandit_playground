@@ -2,6 +2,10 @@
 
 This repository contains the implementation of various multi-armed bandit algorithms and a dashboard for visualizing their performance. The goal is to compare the effectiveness of different algorithms in maximizing rewards and minimizing regret over time.
 
+#### Version Information
+
+This project uses the branch `v1.0-SKILL2025` for the official SKILL 2025 submission. This documentation and code refers to the corresponding branch of this repository.
+
 ## Algorithms and Tuning Parameters
 
 The following algorithms are implemented, each with its own set of tuning parameters:
@@ -79,6 +83,11 @@ git clone https://github.com/eelisee/bandit_playground.git
 cd bandit_playground
 ```
 
+Once the repository is cloned, checkout the Version 1.0 branch by running:
+```bash
+git checkout -b v1.0-SKILL2025 origin/v1.0-SKILL2025
+```
+
 ## 2. Set Up a Virtual Environment
 
 It is strongly recommended to use a virtual environment to manage the project's dependencies. You can create and activate a virtual environment by running the following commands:
@@ -121,3 +130,27 @@ http://127.0.0.1:8050
 ```
 
 If it doesn't open automatically, you can manually copy and paste this URL into your browser.
+
+
+## Reproducibility
+
+The code is designed for easy extensibility:
+
+- **Configuration Management**: All simulation parameters and settings are centrally defined in the configuration file ```config.py```, enabling quick adjustments without changing the core code.
+- **Adding New Algorithms**: New multi-armed bandit algorithms can be integrated easily following a clear structure.
+- **Customizing Plots**: Additional plots for analysis and visualization can be added with minimal changes.
+- **Flexible Scenario Definition**: Different simulation scenarios can be defined via configurable arm distributions.
+
+Detailed instructions for extending the simulation are available in the following documentation files:
+
+- [Instructions to change configuration](docs/instructions_to_change_configuration.md)
+- [Instructions to add new algorithms](docs/instructions_to_add_new_algorithms.md)
+- [Instructions to add new plots](docs/instructions_to_add_new_plot.md)
+
+## Authors
+
+**Elise Wolf** – [elise.wolf@t-online.de] - University of Mannheim Affiliation
+
+## License
+
+This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.

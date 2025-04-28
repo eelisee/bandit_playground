@@ -1,6 +1,6 @@
 import numpy as np
 
-def ETC_simulation(arm_means, num_arms, max_time_horizon, **kwargs):
+def ETC_simulation(arm_means, num_arms, max_time_horizon, rng=None, **kwargs):
     """
     Simulates the Exploration-Then-Commit (ETC) algorithm over the time horizon.
 
@@ -50,7 +50,7 @@ def ETC_simulation(arm_means, num_arms, max_time_horizon, **kwargs):
             arm = np.argmax(rewards / counts)
 
         # Simulate pulling the arm and getting a reward (1 or 0)
-        reward = np.random.binomial(1, arm_means[arm])
+        reward = rng.binomial(1, arm_means[arm])
         
         # Update counts and rewards for the chosen arm
         counts[arm] += 1

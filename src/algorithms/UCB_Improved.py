@@ -1,7 +1,7 @@
 import numpy as np
 import math
 
-def UCB_Improved_simulation(arm_means, num_arms, total_steps, **kwargs):
+def UCB_Improved_simulation(arm_means, num_arms, total_steps, rng=None, **kwargs):
     """
     Simulates the UCB-Improved algorithm over given time horizons.
 
@@ -52,7 +52,7 @@ def UCB_Improved_simulation(arm_means, num_arms, total_steps, **kwargs):
             for m in B:
                 max_pulls = math.ceil((2 * np.log(total_steps * delta**2)) / delta**2)
                 if pulls[m] <= max_pulls:
-                    reward = np.random.binomial(1, arm_means[m])  # Simulate pulling arm m
+                    reward = rng.binomial(1, arm_means[m])
                     rewards[m] += reward
                     pulls[m] += 1
                     total_reward += reward
@@ -84,7 +84,7 @@ def UCB_Improved_simulation(arm_means, num_arms, total_steps, **kwargs):
                 best_arm = B[0]
             else:
                 best_arm = max(B, key=lambda k: rewards[k] / pulls[k])
-            reward = np.random.binomial(1, arm_means[best_arm])
+            reward = rng.binomial(1, arm_means[best_arm])
             total_reward += reward
             pulls[best_arm] += 1
             total_regret += np.max(arm_means) - arm_means[best_arm]

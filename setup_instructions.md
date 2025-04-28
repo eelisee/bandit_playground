@@ -16,7 +16,10 @@ git clone https://github.com/eelisee/bandit_playground.git
 cd bandit_playground
 ```
 
-In case you
+Once the repository is cloned, checkout the Version 1.0 branch by running:
+```bash
+git checkout -b v1.0-SKILL2025 origin/v1.0-SKILL2025
+```
 
 ## 3. Set Up a Virtual Environment
 

@@ -18,24 +18,33 @@ This document provides step-by-step instructions to add a new algorithm to the r
 2. Create a new file for your algorithm, e.g., `new_algorithm.py`.
 3. Implement your algorithm in the new file. Ensure you follow the repository's coding standards and include necessary comments and documentation:
 
-#### Step 2.2: Run Algorithm for Different Scenarios
-1. Ensure your algorithm is run in the standard scenarios: `opt`, `subopt` in combination with versions `1`, `2`, `3` for different arm distributions as described and others listed in in `documentation.md`
-3. Define the combinations:
+#### Run Algorithm for Different Scenarios
+- **General Imports**: Ensure you include the necessary imports at the beginning of your file:
     ```python
-    combinations = [
-        "opt_ver1", "opt_ver2", "opt_ver3",
-        "subopt_ver1", "subopt_ver2", "subopt_ver3"
-    ]
+    import numpy as np
+    from src.bandit_algorithm import BanditAlgorithm
     ```
-4. Run your algorithm for each combination and save the results as `{algorithm.name}_results_{combination}.csv` in `../data/algorithms_results`
-5. Calculate the average results and save them as `{algorithm.name}_average_results_{combination}.csv` in `../data/algorithms_results`
+- **Algorithm Structure**:  
+  Create a subclass of `BanditAlgorithm` and implement the required methods, especially `run(self, arm_distributions, seed)`.
 
-#### Step 2.3: Run Calculations for Dashboard
-1. Navigate to the `../src/calculations_for_dashboard/calculate_averages.ipynb` file.
-2. Add your new algorithm to the corresponding group and rerun the notebook to update the averages.
-3. Navigate to the `../src/calculations_for_dashboard/value_at_risk.ipynb` file.
-4. Add your new algorithm to the corresponding group and rerun the notebook to create the data visualized in plot 5.
+- **Using Configured Combinations**:  
+  The different configurations (e.g., arm distributions, order of arms, etc.) are already defined in the central configuration file.  
+  Your algorithm will automatically be run across all combinations defined there — no need to manually create or save results for each scenario.
 
+- **Save Results Automatically**:  
+  Thanks to the modular structure, your algorithm's results will be saved automatically if you use the `BanditAlgorithm` framework correctly.  
+  No manual saving or handling of result files is necessary.
+
+- **Example Orientation**:  
+  To simplify your work, you can closely orient yourself to the structure of the `ETC` algorithm (`etc.py`) or any other existing algorithm.
+
+- **Add Algorithm to `src/config.py`**:
+  Import your algorithm via 
+  ```python
+  from algorithms.new_algorithm import class_of_new_algorihm
+  ```
+
+  Add your algorithm and its corresponding parameters to the `algorithm_strategy_pairs` and run the `simulation.py`. The resuöts will be saved as `{algorithm.name}_results_{combination}.csv`, `{algorithm.name}_average_results_{combination}.csv` and `/value_at_risk/...` in the corresponding folder  `../data/new_algorithm`
 
 ### Step 3: Add Algorithm to the Dashboard
 1. Open the `src/dashboard.py` file.
@@ -50,12 +59,6 @@ This document provides step-by-step instructions to add a new algorithm to the r
     }
     ```
 4. Save the changes to `dashboard.py`.
-
-
-### (Additional) Step 4: Write Unit Tests
-1. Navigate to the `tests` directory.
-2. Create a new test file for your algorithm, e.g., `test_new_algorithm.py`.
-3. Write unit tests to verify the correctness of your algorithm. Ensure you cover various edge cases.
 
 ### Step 4: Update Documentation
 1. Navigate to the `docs` directory.

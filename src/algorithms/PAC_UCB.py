@@ -1,6 +1,6 @@
 import numpy as np
 
-def PAC_UCB_simulation(arm_means, num_arms, total_steps, **kwargs):
+def PAC_UCB_simulation(arm_means, num_arms, total_steps, rng=None, **kwargs):
     """
     Simulates the epsilon-greedy algorithm over given time horizons.
 
@@ -66,7 +66,7 @@ def PAC_UCB_simulation(arm_means, num_arms, total_steps, **kwargs):
             arm = np.argmax(PAC)
         
         # Simulate pulling the arm
-        reward = np.random.binomial(1, arm_means[arm])
+        reward = rng.binomial(1, arm_means[arm])
         counts[arm] += 1
         rewards[arm] += reward
         sum_of_squares[arm] += reward ** 2

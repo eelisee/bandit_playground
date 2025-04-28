@@ -39,7 +39,7 @@ class UCB1:
         self.values[chosen_arm] = new_value
 
 
-def UCB_simulation(arm_means, num_arms, total_steps):
+def UCB_simulation(arm_means, num_arms, total_steps, rng=None):
     """
     Simulates the UCB algorithm over given time horizons.
 
@@ -80,7 +80,7 @@ def UCB_simulation(arm_means, num_arms, total_steps):
         # Select an arm using UCB1 algorithm
         chosen_arm = ucb.select_arm()
         # Simulate the reward for the chosen arm
-        reward = np.random.binomial(1, arm_means[chosen_arm])
+        reward = rng.binomial(1, arm_means[chosen_arm])
         counts[chosen_arm] += 1
         ucb.update(chosen_arm, reward)
         rewards[chosen_arm] += reward

@@ -1,7 +1,7 @@
 import numpy as np
 import math
 
-def EUCBV_simulation(arm_means, num_arms, total_steps, **kwargs):
+def EUCBV_simulation(arm_means, num_arms, total_steps, rng=None, **kwargs):
     """
     Simulates the epsilon-greedy algorithm over given time horizons.
 
@@ -48,7 +48,7 @@ def EUCBV_simulation(arm_means, num_arms, total_steps, **kwargs):
 
     def play_arm(arm, t):
         nonlocal zeros_count, ones_count, total_reward, suboptimal_arms_count, total_regret
-        reward = np.random.binomial(1, arm_means[arm])  # Simulate reward
+        reward = rng.binomial(1, arm_means[arm])  # Simulate reward
         T_k[arm] += 1
         X_k[arm] += reward
         sum_of_squares[arm] += reward**2

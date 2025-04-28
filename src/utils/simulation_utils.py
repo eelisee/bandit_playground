@@ -1,6 +1,8 @@
 import numpy as np
+import os
+from config import base_path
 
-def general_simulation(algorithm, arm_means, parameters, strategy_fn, **kwargs):
+def general_simulation(algorithm, arm_means, parameters, strategy_fn, rng =None, **kwargs):
     """
     Runs a general simulation for the specified bandit algorithm over given parameters and arm means using a provided simulation function.
 
@@ -24,7 +26,7 @@ def general_simulation(algorithm, arm_means, parameters, strategy_fn, **kwargs):
     num_arms = len(arm_means)
     
     for iteration in range(1, 101):
-        results = strategy_fn(arm_means, num_arms, max_time_horizon, **kwargs)
+        results = strategy_fn(arm_means, num_arms, max_time_horizon, rng=rng, **kwargs)
         
         for param in parameters:
             total_reward = results["total_rewards"][param - 1]
@@ -34,3 +36,25 @@ def general_simulation(algorithm, arm_means, parameters, strategy_fn, **kwargs):
             ones_count = results["ones_counts"][param - 1]
 
             algorithm.add_result(param, iteration, total_reward, suboptimal_arms_count, total_regret, zeros_count, ones_count)
+
+
+# Create directory based on algorithm name and parameters
+def get_directory_for_algorithm(algorithm, params):
+    algorithm_dir = os.path.join(base_path, algorithm.name)
+
+    # Dynamically generate parameter directory by iterating over params
+    if params:
+        param_dir = '_'.join(['{}_{}'.format(key, str(value).replace('.', '_')) for key, value in params.items()])
+    else:
+        param_dir = 'default'
+    
+    # Construct full directory path and create it if necessary
+    full_dir = os.path.join(algorithm_dir, param_dir)
+    create_directory(full_dir)
+    
+    return full_dir
+
+# Ensure directories are created before saving results
+def create_directory(path):
+    if not os.path.exists(path):
+        os.makedirs(path)

@@ -81,17 +81,12 @@ python src/dashboard.py
 
 Open your browser and go to http://127.0.0.1:8050 to see the new plot in action.
 
-### (Additional) Step 6: Write Unit Tests
-1. Navigate to the `tests` directory.
-2. Create a new test file for your algorithm, e.g., `test_new_algorithm.py`.
-3. Write unit tests to verify the correctness of your algorithm. Ensure you cover various edge cases.
-
-### Step 7: Update Documentation
+### Step 6: Update Documentation
 1. Navigate to the `docs` directory.
 2. Update the documentation file `documentation.md` to include information about your new algorithm.
 3. Ensure you provide a detailed description, usage examples, and any necessary diagrams or illustrations.
 
-### Step 8: Commit and Push Changes
+### Step 7: Commit and Push Changes
 1. Add your changes to the staging area:
     ```sh
     git add .
@@ -105,12 +100,12 @@ Open your browser and go to http://127.0.0.1:8050 to see the new plot in action.
     git push origin add-new-algorithm
     ```
 
-### Step 9: Create a Pull Request
+### Step 8: Create a Pull Request
 1. Go to the repository on GitHub.
 2. Create a new pull request from your branch.
 3. Provide a detailed description of your changes and request a review.
 
-### Step 10: Address Review Feedback
+### Step 9: Address Review Feedback
 1. Address any feedback provided by reviewers.
 2. Make necessary changes and push them to your branch.
 3. Once approved, merge your pull request.
