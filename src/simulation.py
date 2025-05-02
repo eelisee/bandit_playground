@@ -15,7 +15,7 @@ from calculations_for_dashboard.value_at_risk import run_value_at_risk
 
 # Signal handler for graceful shutdown on Ctrl + C
 def signal_handler(sig, frame):
-    print("\nTerminating processes...")
+    #print("\nTerminating processes...")
     sys.exit(0)
 
 # Register signal handler

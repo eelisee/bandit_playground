@@ -9,7 +9,7 @@ class BanditAlgorithm:
     def add_result(self, param, iteration, total_reward, suboptimal_arms_count, total_regret, zeros_count, ones_count):
         self.results.append([param, iteration, total_reward, suboptimal_arms_count, round(total_regret, 2), zeros_count, ones_count])
         # Print the added result to verify
-        print(f"Added result: {[param, iteration, total_reward, suboptimal_arms_count, round(total_regret, 2), zeros_count, ones_count]}")
+        #print(f"Added result: {[param, iteration, total_reward, suboptimal_arms_count, round(total_regret, 2), zeros_count, ones_count]}")
 
         # Optional: Raise an error if the result is not added (for debugging purposes)
         if [param, iteration, total_reward, suboptimal_arms_count, round(total_regret, 2), zeros_count, ones_count] not in self.results:
