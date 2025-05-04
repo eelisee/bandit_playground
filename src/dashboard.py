@@ -494,7 +494,7 @@ def update_plots(*args):
 
     if selected_algorithm in selected_algorithms:
         selected_data = data[selected_algorithm][0]
-        df_100k = selected_data[selected_data['Timestep'] == 100000]
+        df_100k = selected_data[selected_data['Timestep'] == 1000000]
         # Find the color for the selected algorithm
         selected_algo_info = next((algo for algo in algorithm_data if algo['value'] == selected_algorithm.split('_')[0]), None)
         if selected_algo_info:

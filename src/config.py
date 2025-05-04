@@ -45,7 +45,7 @@ algorithm_groups = {
 # ======= Parameters =======
 
 # Define the time horizons for the simulation
-time_horizons = [2, 3, 100, 200, 2000, 10000, 20000, 40000, 60000, 80000, 10000, 200000, 400000, 600000, 800000, 1000000]
+time_horizons = [2, 3, 100, 200, 2000, 10000, 20000, 40000, 60000, 80000, 100000, 200000, 400000, 600000, 800000, 1000000]
 
 # Define the possible individual arm values
 individual_arm_distribution = [0.9, 0.895, 0.89, 0.85, 0.8]
