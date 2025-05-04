@@ -194,45 +194,45 @@ app.layout = html.Div(
         html.Div(
             style={'display': 'flex'},
             children=[
-                # Settings panel
+            # Settings panel
+            html.Div(
+                style={'flex': '1', 'padding': '20px', 'backgroundColor': '#f0f0f0'},
+                children=[
+                html.H2("Settings"),
                 html.Div(
-                    style={'flex': '1', 'padding': '20px', 'backgroundColor': '#f0f0f0'},
+                    style={'flex': '1', 'backgroundColor': '#f0f0f0'},
                     children=[
-                        html.H2("Settings"),
+                    # Checklist for selecting algorithms
+                    *[
                         html.Div(
-                            style={'flex': '1', 'backgroundColor': '#f0f0f0'},
-                            children=[
-                                # Checklist for selecting algorithms
-                                *[
-                                    html.Div(
-                                    style={'margin-bottom': '20px'},
-                                    children=[
-                                        html.Div([
-                                        # Checkbox for algorithm selection
-                                        dcc.Checklist(
-                                            id=f"{algo['value']}_{algo['index']}_checklist",
-                                            options=[
-                                                {"label": get_label_with_params(algo["value"], algo["params"]), 
-                                                "value": f"{algo['value']}_{algo['index']}"}
-                                            ],
-                                            value=[f"{algo['value']}_{algo['index']}"],
-                                            labelStyle={
-                                                "color": algo["color"],
-                                                'display': 'block',
-                                                "margin-left": "20px" if "ETC" in algo["value"] or 
-                                                                "Greedy" in algo["value"] or 
-                                                                "UCB" in algo["value"] or 
-                                                                "PAC-UCB" in algo["value"] or 
-                                                                "UCB-Improved" in algo["value"] or
-                                                                "UCB-Tuned" in algo["value"] or 
-                                                                "UCB-V" in algo["value"] or 
-                                                                "EUCBV" in algo["value"] else "0px"
-                                            }
-                                        )
-                                    ]) for algo in algorithm_data
-                                ]
-                                )
-                                ],
+                        style={'margin-bottom': '20px'},
+                        children=[
+                        html.Div([
+                        # Checkbox for algorithm selection
+                        dcc.Checklist(
+                            id=f"{algo['value']}_{algo['index']}_checklist",
+                            options=[
+                            {"label": f"{get_label_with_params(algo['value'], algo['params'])} ({algo['value']}_{algo['index']})", 
+                            "value": f"{algo['value']}_{algo['index']}"}
+                            ],
+                            value=[f"{algo['value']}_{algo['index']}"],
+                            labelStyle={
+                            "color": algo["color"],
+                            'display': 'block',
+                            "margin-left": "20px" if "ETC" in algo["value"] or 
+                                    "Greedy" in algo["value"] or 
+                                    "UCB" in algo["value"] or 
+                                    "PAC-UCB" in algo["value"] or 
+                                    "UCB-Improved" in algo["value"] or
+                                    "UCB-Tuned" in algo["value"] or 
+                                    "UCB-V" in algo["value"] or 
+                                    "EUCBV" in algo["value"] else "0px"
+                            }
+                        )
+                        ]) for algo in algorithm_data
+                    ]
+                    )
+                    ],
                                 # Dropdown for selecting first arm distribution
                                 html.Label('Arm 1 Distribution', style={'margin-top': '10px'}),
                                 dcc.Dropdown(
