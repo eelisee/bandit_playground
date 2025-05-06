@@ -265,6 +265,16 @@ app.layout = html.Div(
                                     value='-',  # default optional value
                                     style={'margin-bottom': '10px'}
                                 ),
+                                # Dropdown for selecting algorithm for Fig. 4
+                                html.Label('Algorithm for Fig. 4', style={'margin-top': '10px'}),
+                                dcc.Dropdown(
+                                    id='selected_algorithm',
+                                    options=[], 
+                                    placeholder='Select...',
+                                    clearable=False,
+                                    value='None',
+                                    style={'margin-bottom': '10px'}
+                                ),
                                 # Dropdown for selecting alpha value
                                 html.Label('Alpha for Fig. 5', style={'margin-top': '10px'}),
                                 dcc.Dropdown(
@@ -277,16 +287,6 @@ app.layout = html.Div(
                                     placeholder='Select...',  
                                     clearable=False,
                                     value='0.05',
-                                    style={'margin-bottom': '10px'}
-                                ),
-                                # Dropdown for selecting algorithm for Fig. 4
-                                html.Label('Algorithm for Fig. 4', style={'margin-top': '10px'}),
-                                dcc.Dropdown(
-                                    id='selected_algorithm',
-                                    options=[], 
-                                    placeholder='Select...',
-                                    clearable=False,
-                                    value='None',
                                     style={'margin-bottom': '10px'}
                                 ),
                             ]
@@ -360,8 +360,8 @@ def update_plots(*args):
     tuple: A tuple containing six plotly.graph_objects.Figure objects:
         - fig1: Average Total Reward over Time.
         - fig2: Average Total Regret over Time.
-        - fig3: Average Zeros and Ones Count.
-        - fig4: Distribution of Total Regret at Timestep 100000.
+        - fig3: Reward Outcome Distribution.
+        - fig4: Distribution of Total Regret at Timestep 1000000.
         - fig5: Value at Risk for the selected alpha.
         - fig6: Proportion of Suboptimal Arms pulled / all Arms pulled.
     """
@@ -429,7 +429,7 @@ def update_plots(*args):
         showlegend=False
     )
 
-    # Plot 3: Average Zeros and Ones Count
+    # Plot 3: Reward Outcome Distribution
     fig3 = go.Figure()
 
     zeros_counts = []
@@ -479,7 +479,7 @@ def update_plots(*args):
 
     # Layout adjustments
     fig3.update_layout(
-        title='Fig. 3: Average Zeros and Ones Count',
+        title='Fig. 3: Reward Outcome Distribution',
         xaxis_title='Algorithm',
         yaxis_title='Count',
         barmode='group',
@@ -494,7 +494,7 @@ def update_plots(*args):
 
     if selected_algorithm in selected_algorithms:
         selected_data = data[selected_algorithm][0]
-        df_100k = selected_data[selected_data['Timestep'] == 1000000]
+        df_100 = selected_data[selected_data['Timestep'] == 1000000]
         # Find the color for the selected algorithm
         selected_algo_info = next((algo for algo in algorithm_data if algo['value'] == selected_algorithm.split('_')[0]), None)
         if selected_algo_info:
@@ -502,9 +502,9 @@ def update_plots(*args):
         else:
             selected_color = 'black'
         
-        fig4 = go.Figure(go.Histogram(x=df_100k['Total Regret'], marker_color=selected_color))
+        fig4 = go.Figure(go.Histogram(x=df_100['Total Regret'], marker_color=selected_color))
         fig4.update_layout(
-            title=f'Fig. 4: Distribution of Total Regret at t=100 000 for {selected_algorithm}',
+            title=f'Fig. 4: Distribution of Total Regret at t=1 000 000 for {selected_algorithm}',
             xaxis_title="Total Regret",
             yaxis_title="Count",
             paper_bgcolor='white',
