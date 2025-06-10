@@ -95,6 +95,6 @@ Important: Keeping a fixed seed is recommended for experimental reproducibility.
 ---
 
 ### Step 3: Save and Validate Changes
-1.	After making changes, save the `config.py` file.
+1.	After making changes, save the `config.py` file. Then run the simulation again via `simulation.py` file. You do not have to make any changes there.
 2.	Run a short test simulation to ensure the new configuration is correctly loaded and there are no import or logic errors.
-3.	Check that all paths and combinations are generated as expected under the `.../data` folder.
+3.	Check that all paths and combinations are generated as expected under the `/data` folder.

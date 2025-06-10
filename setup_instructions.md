@@ -85,6 +85,8 @@ The dashboard allows you to experiment with various stochastic bandit algorithms
 
 ## 7. Adapting Algorithms and saving Results
 
+After changing the algorithm configuration in the `config.py` file, you can run the simulation again via `simulation.py` file. You do not have to make any changes there.
+
 The dashboard automatically saves the results of each algorithm run beforehand and plotted in the dashboard in the data/ folder. Each file corresponds to the selected parameters and algorithm. If you want to adapt algorithms, these results are saved after running and can later be reloaded and analyzed.
 
 ## 8. Troubleshooting
