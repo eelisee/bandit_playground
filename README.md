@@ -149,7 +149,7 @@ Detailed instructions for extending the simulation are available in the followin
 
 ## Authors
 
-**Elise Wolf** – [elise.wolf@t-online.de] - University of Mannheim Affiliation
+**Elise Wolf** – [elise.marie.wolf@students.uni-mannheim.de] - University of Mannheim Affiliation
 
 ## License
 
