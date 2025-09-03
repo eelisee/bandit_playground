@@ -13,6 +13,7 @@ from algorithms.UCB_V import UCB_V_simulation
 from algorithms.PAC_UCB import PAC_UCB_simulation
 from algorithms.UCB_Improved import UCB_Improved_simulation
 from algorithms.EUCBV import EUCBV_simulation
+from algorithms.RAVEN_UCB import RAVEN_UCB_simulation
 
 # List of algorithms and their corresponding strategies
 algorithm_strategy_pairs = [
@@ -31,12 +32,13 @@ algorithm_strategy_pairs = [
     (BanditAlgorithm("UCB-V"), {"strategy_fn": UCB_V_simulation, "params": {"theta": 1, "c": 1, "b": 1}}),
     (BanditAlgorithm("PAC-UCB"), {"strategy_fn": PAC_UCB_simulation, "params": {"c": 1, "b": 1, "q": 1.3, "beta": 0.05}}),
     (BanditAlgorithm("UCB-Improved"), {"strategy_fn": UCB_Improved_simulation, "params": { "delta": 1}}),
-    (BanditAlgorithm("EUCBV"), {"strategy_fn": EUCBV_simulation, "params": {"rho": 0.5}})
+    (BanditAlgorithm("EUCBV"), {"strategy_fn": EUCBV_simulation, "params": {"rho": 0.5}}),
+    (BanditAlgorithm("RAVEN-UCB"), {"strategy_fn": RAVEN_UCB_simulation, "params": {"alpha0": 1.0, "beta0": 1.0, "epsilon": 1e-2}})
 ]
 
 # Algorithm group definitions, add algorithms to the respective groups here
 algorithm_groups = {
-    "Variance-aware UCB Variations": ["UCB-Tuned", "UCB-V", "EUCBV"],
+    "Variance-aware UCB Variations": ["UCB-Tuned", "UCB-V", "EUCBV", "RAVEN-UCB"],
     "Not-variance-aware UCB Variations": ["PAC-UCB", "UCB-Improved"],
     "Standard Algorithms": ["ETC", "Greedy", "UCB"]
 }

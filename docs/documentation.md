@@ -26,6 +26,8 @@ The simulation includes eight different multi-armed bandit (MAB) algorithms, eac
   
 - **EUCBV (Efficient-UCBV)**: Combines the principles of UCB-V and UCB-Improved by introducing additional parameters for fine-grained control of exploration and arm elimination.
 
+- **RAVEN-UCB**: Combines UCB and variance-awareness of UCB-V but in a different exploration bonus
+
 #### Algorithm Categories
 
 The algorithms can be categorized according to their treatment of reward variance and exploration strategies:
@@ -43,6 +45,7 @@ The algorithms can be categorized according to their treatment of reward varianc
   - UCB-Tuned
   - UCB-V
   - EUCBV
+  - RAVEN-UCB
 
 This categorization helps to understand the underlying strategies and the contexts in which specific algorithms may perform better.
 

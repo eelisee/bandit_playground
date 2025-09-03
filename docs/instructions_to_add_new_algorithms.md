@@ -44,7 +44,7 @@ This document provides step-by-step instructions to add a new algorithm to the r
   from algorithms.new_algorithm import class_of_new_algorihm
   ```
 
-  Add your algorithm and its corresponding parameters to the `algorithm_strategy_pairs` and run the `simulation.py`. The resuöts will be saved as `{algorithm.name}_results_{combination}.csv`, `{algorithm.name}_average_results_{combination}.csv` and `/value_at_risk/...` in the corresponding folder  `../data/new_algorithm`
+  Add your algorithm and its corresponding parameters to the `algorithm_strategy_pairs` and run the `simulation.py`. The results will be saved as `{algorithm.name}_results_{combination}.csv`, `{algorithm.name}_average_results_{combination}.csv` and `/value_at_risk/...` in the corresponding folder  `../data/new_algorithm`
 
 ### Step 3: Add Algorithm to the Dashboard
 1. Open the `src/dashboard.py` file.

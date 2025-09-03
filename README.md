@@ -54,6 +54,10 @@ The following algorithms are implemented, each with its own set of tuning parame
    - Scenarios:
       - `rho`: 0.5
 
+- **RAVEN-UCB**: Uses different variance-aware exploration bonus as UCB
+   - Tuning Parameters: `alpha`, `beta`, `epsilon`
+   - Scenarios:
+      - `alpha`: 1, `beta`: 1, `epsilon`: 0.02
 
 ## Bandit Model
 

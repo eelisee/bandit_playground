@@ -27,7 +27,8 @@ algorithm_data = [
     {"label": "Variance-aware UCB Variations", "value": "Variance-aware UCB Variations", "color": "#BC8F8F", "line_style": "dash"},
     {"label": "UCB-Tuned", "value": "UCB-Tuned", "color": "#DAA520", "line_style": "dash"},
     {"label": "UCB-V", "value": "UCB-V", "color": "#D2691E", "line_style": "dash"},
-    {"label": "EUCBV", "value": "EUCBV", "color": "#800000", "line_style": "dash"}
+    {"label": "EUCBV", "value": "EUCBV", "color": "#800000", "line_style": "dash"},
+    {"label": "RAVEN-UCB", "value": "RAVEN-UCB", "color": "#8C0000", "line_style": "dash"}
 ]
 
 # Create a mapping of algorithm names with their corresponding IDs
