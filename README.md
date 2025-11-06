@@ -151,6 +151,20 @@ Detailed instructions for extending the simulation are available in the followin
 
 **Elise Wolf** – [elise.marie.wolf@students.uni-mannheim.de] - University of Mannheim Affiliation
 
+## Citation
+
+If you use this project, please cite
+@misc{wolf2025frameworkfairevaluationvarianceaware,
+      title={A Framework for Fair Evaluation of Variance-Aware Bandit Algorithms}, 
+      author={Elise Wolf},
+      year={2025},
+      eprint={2510.27001},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2510.27001}, 
+}
+
 ## License
 
 This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
+
